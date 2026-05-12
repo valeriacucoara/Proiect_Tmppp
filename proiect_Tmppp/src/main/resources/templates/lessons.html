@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecții</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { margin:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f4f8ff; color:#16325c; }
+        .app-shell { display:flex; min-height:100vh; }
+        .sidebar { width:280px; background:#0f4ac8; color:#fff; padding:2rem 1rem; }
+        .nav-link { color:rgba(255,255,255,0.9); margin-bottom:0.75rem; display:block; padding:0.75rem 1rem; border-radius:14px; text-decoration:none; }
+        .nav-link:hover, .nav-link.active { background:rgba(255,255,255,0.14); color:#fff; }
+        .content { flex:1; padding:2rem; }
+        .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; }
+        .page-title { margin:0; font-size:2rem; }
+        .lesson-card { background:#fff; border-radius:22px; padding:1.8rem; box-shadow:0 18px 40px rgba(17,68,112,0.08); margin-bottom:1.25rem; }
+        .lesson-header { display:flex; justify-content:space-between; align-items:center; }
+        .lesson-topic { font-weight:700; }
+        .tag { padding:0.35rem 0.8rem; border-radius:999px; font-size:0.82rem; }
+        .tag-live { background:#e8f1ff; color:#0f4ac8; }
+        .tag-scheduled { background:#fff4db; color:#a35f00; }
+    </style>
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <h2>EduPlatform</h2>
+        <a th:href="@{/}" class="nav-link">Dashboard</a>
+        <a th:href="@{/users}" class="nav-link">Utilizatori</a>
+        <a th:href="@{/courses}" class="nav-link">Cursuri</a>
+        <a th:href="@{/lessons}" class="nav-link active">Lecții</a>
+        <a th:href="@{/evaluations}" class="nav-link">Evaluări</a>
+        <a th:href="@{/statistics}" class="nav-link">Statistici</a>
+        <a th:href="@{/logout}" class="nav-link">Logout</a>
+    </aside>
+    <main class="content">
+        <div class="topbar">
+            <div>
+                <h1 class="page-title">Lecții</h1>
+                <p class="text-muted">Urmărește progresul fiecărei lecții și planifică următoarele sesiuni.</p>
+            </div>
+        </div>
+        <div class="lesson-card">
+            <div class="lesson-header">
+                <div>
+                    <p class="lesson-topic mb-1">Introducere în programare</p>
+                    <p class="text-muted mb-0">Lecția 1 din 10</p>
+                </div>
+                <span class="tag tag-live">Live</span>
+            </div>
+            <p class="mt-3">Componente de bază ale limbajului, sintaxă și primele exerciții practice.</p>
+        </div>
+        <div class="lesson-card">
+            <div class="lesson-header">
+                <div>
+                    <p class="lesson-topic mb-1">Proiect UI responsive</p>
+                    <p class="text-muted mb-0">Lecția 3 din 7</p>
+                </div>
+                <span class="tag tag-scheduled">Programată</span>
+            </div>
+            <p class="mt-3">Organizează conținutul și componentelor vizuale pentru o experiență optimă.</p>
+        </div>
+        <div class="lesson-card">
+            <div class="lesson-header">
+                <div>
+                    <p class="lesson-topic mb-1">Evaluarea proiectului</p>
+                    <p class="text-muted mb-0">Lecția 6 din 8</p>
+                </div>
+                <span class="tag tag-live">Live</span>
+            </div>
+            <p class="mt-3">Discută criteriile de notare și feedback-ul pentru proiectele studenților.</p>
+        </div>
+    </main>
+</div>
+</body>
+</html>

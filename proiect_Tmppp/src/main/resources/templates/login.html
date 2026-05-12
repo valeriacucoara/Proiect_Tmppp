@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autentificare</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(180deg, #1a73e8 0%, #0d47a1 100%);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .page-shell {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        .auth-card {
+            width: min(100%, 460px);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(18px);
+            border-radius: 28px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.23);
+            padding: 2.5rem;
+        }
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.06em;
+        }
+        .brand-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #66ccff;
+            box-shadow: 0 0 18px rgba(102, 204, 255, 0.45);
+        }
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.35rem;
+        }
+        .lead {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.8rem;
+            line-height: 1.6;
+        }
+        .form-control {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #fff;
+            border-radius: 16px;
+            padding: 1rem 1.1rem;
+        }
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.65);
+        }
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.45);
+            box-shadow: 0 0 0 0.2rem rgba(102, 204, 255, 0.16);
+            color: #fff;
+        }
+        .form-label {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.5rem;
+        }
+        .btn-primary {
+            background: #43c0ff;
+            border: none;
+            color: #072f4b;
+            font-weight: 700;
+            border-radius: 14px;
+            padding: 0.95rem 1.2rem;
+        }
+        .btn-primary:hover {
+            background: #33b4ee;
+        }
+        .secondary-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #fff;
+            border-radius: 14px;
+            padding: 0.95rem 1.2rem;
+            width: 100%;
+        }
+        .secondary-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+        .action-row {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        .action-text {
+            color: rgba(255, 255, 255, 0.72);
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .action-link {
+            color: #a6d8ff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .action-link:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="page-shell">
+    <div class="auth-card">
+        <div class="mb-4">
+            <div class="brand">
+                <span class="brand-dot"></span>
+                <span>Platformă Recrutare</span>
+            </div>
+            <h1>Autentificare</h1>
+            <p class="lead">Accesează contul tău pentru a administra anunțurile, candidații și procesele de recrutare.</p>
+        </div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <form th:action="@{/login}" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Email</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="adresa@exemplu.com" required>
+            </div>
+            <div class="mb-4">
+                <label for="password" class="form-label">Parolă</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="******" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Autentificare</button>
+        </form>
+        <div class="action-row">
+            <a href="/register" class="secondary-btn">Înregistrare</a>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

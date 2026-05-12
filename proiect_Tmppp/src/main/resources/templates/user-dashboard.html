@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard candidat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { margin: 0; font-family: Inter, "Segoe UI", sans-serif; background: #f4f7fb; color: #172033; }
+        .layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        .sidebar { background: #102a43; color: #dbeafe; padding: 1.25rem; position: sticky; top: 0; height: 100vh; }
+        .brand { color: #fff; text-decoration: none; font-weight: 850; display: block; margin-bottom: 2rem; }
+        .side-link { display: block; color: #bfdbfe; text-decoration: none; padding: .75rem .85rem; border-radius: 8px; margin-bottom: .35rem; font-weight: 650; }
+        .side-link.active, .side-link:hover { background: rgba(255,255,255,.1); color: #fff; }
+        .main { padding: 2rem; }
+        .cardx { background: #fff; border: 1px solid #e4ebf3; border-radius: 8px; padding: 1.1rem; height: 100%; }
+        .stat strong { display: block; font-size: 2rem; line-height: 1; }
+        .stat span { color: #64748b; font-weight: 650; }
+        .bar { height: 9px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+        .bar > span { display: block; height: 100%; background: #0f766e; }
+        .tag { display: inline-flex; padding: .3rem .55rem; border-radius: 999px; background: #eef6ff; color: #174b66; font-size: .8rem; font-weight: 750; margin: .1rem; }
+        .timeline { border-left: 3px solid #dbeafe; padding-left: 1rem; }
+        .timeline-item { margin-bottom: .85rem; }
+        .btn-main { background: #0f766e; border-color: #0f766e; color: #fff; font-weight: 750; border-radius: 8px; }
+        .list-row { border-bottom: 1px solid #edf2f7; padding: .75rem 0; }
+        .list-row:last-child { border-bottom: 0; }
+        textarea { min-height: 130px; }
+        @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .sidebar { height: auto; position: relative; } .main { padding: 1rem; } }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <a class="brand" th:href="@{/}">RecruitPro</a>
+        <a class="side-link" th:href="@{/}">Acasa</a>
+        <a class="side-link active" th:href="@{/user-dashboard}">Dashboard</a>
+        <a class="side-link" th:href="@{/jobs}">Joburi</a>
+        <a class="side-link" href="#profile">Profil si CV</a>
+        <a class="side-link" href="#messages">Mesagerie</a>
+        <a class="side-link" th:href="@{/logout}">Logout</a>
+    </aside>
+
+    <main class="main">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+            <div>
+                <p class="text-uppercase text-secondary fw-bold mb-1">Dashboard candidat</p>
+                <h1 class="fw-bold mb-0">Bun venit, <span th:text="${currentUser}">User</span></h1>
+            </div>
+            <a class="btn btn-main" th:href="@{/jobs}">Cauta joburi</a>
+        </div>
+
+        <div th:if="${profileMessage}" class="alert alert-success" th:text="${profileMessage}"></div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-3"><div class="cardx stat"><strong th:text="${applications.size()}">0</strong><span>aplicatii trimise</span></div></div>
+            <div class="col-md-3"><div class="cardx stat"><strong th:text="${favorites.size()}">0</strong><span>joburi favorite</span></div></div>
+            <div class="col-md-3"><div class="cardx stat"><strong th:text="${openApplications}">0</strong><span>aplicatii active</span></div></div>
+            <div class="col-md-3"><div class="cardx stat"><strong th:text="${recommendations.size()}">0</strong><span>recomandari</span></div></div>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-lg-8">
+                <section class="cardx">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h2 class="h5 fw-bold mb-0">Status aplicatii</h2>
+                        <span class="text-secondary">actualizat in timp real</span>
+                    </div>
+                    <div th:if="${applications.isEmpty()}" class="text-secondary">Nu ai aplicatii inca. Exploreaza joburile disponibile.</div>
+                    <div class="list-row" th:each="application : ${applications}">
+                        <div class="d-flex flex-wrap justify-content-between gap-2">
+                            <div>
+                                <strong th:text="${application.appliedJobTitle ?: 'Aplicatie generala'}">Job</strong>
+                                <div class="text-secondary" th:text="${application.recruiterMessage}">Mesaj</div>
+                            </div>
+                            <span class="badge text-bg-light align-self-start" th:text="${application.status}">Applied</span>
+                        </div>
+                        <div class="bar mt-2"><span th:style="'width:' + (${application.status == 'Accepted'} ? '100' : (${application.status == 'Rejected'} ? '100' : (${application.status == 'Interviewed'} ? '70' : '35'))) + '%'"></span></div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-4">
+                <section class="cardx">
+                    <h2 class="h5 fw-bold">Notificari</h2>
+                    <div class="timeline mt-3">
+                        <div class="timeline-item" th:each="notification : ${notifications}" th:text="${notification}">Notificare</div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-lg-6">
+                <section class="cardx">
+                    <h2 class="h5 fw-bold">Recomandari personalizate</h2>
+                    <div class="list-row" th:each="job : ${recommendations}">
+                        <div class="d-flex justify-content-between gap-3">
+                            <div>
+                                <strong th:text="${job.title}">Job</strong>
+                                <div><span class="tag" th:text="${job.domain}">Domeniu</span><span class="tag" th:text="${job.location}">Locatie</span></div>
+                            </div>
+                            <a class="btn btn-sm btn-outline-dark align-self-start" th:href="@{/jobs}">Detalii</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-6">
+                <section class="cardx">
+                    <h2 class="h5 fw-bold">Favorite</h2>
+                    <div th:if="${favorites.isEmpty()}" class="text-secondary">Joburile salvate apar aici.</div>
+                    <div class="list-row" th:each="job : ${favorites}">
+                        <strong th:text="${job.title}">Job</strong>
+                        <div class="text-secondary"><span th:text="${job.location}">Locatie</span> · <span th:text="${#numbers.formatDecimal(job.salary, 0, 0)}">0</span> MDL</div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-lg-6" id="profile">
+                <section class="cardx">
+                    <h2 class="h5 fw-bold">Profil si CV</h2>
+                    <form th:action="@{/profile/update}" method="post">
+                        <label class="form-label mt-2">Nume complet</label>
+                        <input class="form-control" name="fullName" th:value="${profile.fullName}" required>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label class="form-label mt-2">Domeniu preferat</label>
+                                <input class="form-control" name="domainPreference" th:value="${profile.domainPreference}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label mt-2">Locatie preferata</label>
+                                <input class="form-control" name="locationPreference" th:value="${profile.locationPreference}" required>
+                            </div>
+                        </div>
+                        <label class="form-label mt-2">Ani experienta</label>
+                        <input class="form-control" type="number" min="0" name="experienceYears" th:value="${profile.experienceYears}" required>
+                        <label class="form-label mt-2">CV</label>
+                        <textarea class="form-control" name="cv" th:text="${profile.cv}"></textarea>
+                        <button class="btn btn-main mt-3" type="submit">Actualizeaza profilul</button>
+                    </form>
+                </section>
+            </div>
+            <div class="col-lg-6" id="messages">
+                <section class="cardx">
+                    <h2 class="h5 fw-bold">Mesagerie recruiter</h2>
+                    <div class="mb-3" style="max-height:220px;overflow:auto;">
+                        <div class="list-row" th:each="message : ${messages}" th:text="${message}">Mesaj</div>
+                    </div>
+                    <form th:action="@{/messages/send}" method="post">
+                        <label class="form-label">Trimite mesaj</label>
+                        <textarea class="form-control" name="message" placeholder="Scrie intrebarea ta..." required></textarea>
+                        <button class="btn btn-main mt-3" type="submit">Trimite</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

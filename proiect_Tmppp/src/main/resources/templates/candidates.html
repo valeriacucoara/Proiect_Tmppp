@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Candidaților</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; color: #333; }
+        .navbar { background-color: #007bff; }
+        .navbar-brand, .nav-link { color: white !important; }
+        .table th { background-color: #007bff; color: white; }
+        .btn-success { background-color: #28a745; border-color: #28a745; }
+        .btn-success:hover { background-color: #218838; border-color: #1e7e34; }
+        .btn-danger { background-color: #dc3545; border-color: #dc3545; }
+        .btn-danger:hover { background-color: #c82333; border-color: #bd2130; }
+        .btn-primary { background-color: #007bff; border-color: #007bff; }
+        .btn-primary:hover { background-color: #0056b3; border-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">Platformă Recrutare</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/candidates}">Candidates</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/jobs}">Jobs</a></li>
+                    <li class="nav-item" th:if="${currentRole == null}"><a class="nav-link" th:href="@{/login}">Login</a></li>
+                    <li class="nav-item dropdown" th:if="${currentRole != null}">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span th:text="${currentUser ?: currentRole}">User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" th:href="@{/user-dashboard}" th:if="${isUser}">My Dashboard</a></li>
+                            <li><a class="dropdown-item" th:href="@{/admin-dashboard}" th:if="${isAdmin}">Admin Panel</a></li>
+                            <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h2 class="mb-4">Lista Candidaților</h2>
+        <div th:if="${isAdmin}">
+            <a class="btn btn-primary mb-3" th:href="@{/add-candidate}">Adaugă Candidat</a>
+        </div>
+        <div th:if="${!isAdmin}">
+            <div class="alert alert-info">Loghează-te ca admin pentru a adăuga sau aproba candidați.</div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nume</th>
+                    <th>Email</th>
+                    <th>Skill</th>
+                    <th>Status</th>
+                    <th>Acțiuni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="candidate : ${candidates}">
+                    <td th:text="${candidate.name}"></td>
+                    <td th:text="${candidate.email}"></td>
+                    <td th:text="${candidate.skill}">N/A</td>
+                    <td th:text="${candidate.currentStatus}">Applied</td>
+                    <td>
+                        <div th:if="${isAdmin}">
+                            <a th:href="@{'/candidates/cv/' + ${candidate.id}}" class="btn btn-info btn-sm">View CV</a>
+                            <form th:action="@{'/candidates/evaluate/' + ${candidate.id}}" method="post" style="display:inline-block;">
+                                <button type="submit" class="btn btn-warning btn-sm">Evaluate</button>
+                            </form>
+                            <form th:action="@{'/candidates/approve/' + ${candidate.id}}" method="post" style="display:inline-block;">
+                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                            </form>
+                            <form th:action="@{'/candidates/reject/' + ${candidate.id}}" method="post" style="display:inline-block;">
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </div>
+                        <div th:if="${!isAdmin}">Waiting review</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

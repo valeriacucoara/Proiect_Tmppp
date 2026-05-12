@@ -1,0 +1,621 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< md.utm:proiect_Tmppp >------------------------
+[INFO] Building proiect_Tmppp 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ proiect_Tmppp ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ proiect_Tmppp ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 69 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ proiect_Tmppp ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 142 source files with javac [debug parameters release 21] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/repository/AppUserRepository.java:[4,47] package org.springframework.data.jpa.repository does not exist
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/repository/AppUserRepository.java:[10,44] cannot find symbol
+  symbol: class JpaRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[5,2] cannot find symbol
+  symbol: class Entity
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[6,2] cannot find symbol
+  symbol: class Table
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[3,1] package jakarta.persistence does not exist
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[9,6] cannot find symbol
+  symbol:   class Id
+  location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[10,6] cannot find symbol
+  symbol:   class GeneratedValue
+  location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[10,32] cannot find symbol
+  symbol:   variable GenerationType
+  location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[20,6] cannot find symbol
+  symbol:   class Column
+  location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[22,6] cannot find symbol
+  symbol:   class Column
+  location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[24,6] cannot find symbol
+  symbol:   class Column
+  location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[26,6] cannot find symbol
+  symbol:   class Column
+  location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[31,32] cannot find symbol
+  symbol:   method count()
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[32,36] constructor Candidate in class md.utm.proiect_Tmppp.entity.Candidate cannot be applied to given types;
+  required: no arguments
+  found:    java.lang.String,java.lang.String
+  reason: actual and formal argument lists differ in length
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[33,23] cannot find symbol
+  symbol:   method setSkill(java.lang.String)
+  location: variable candidate1 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[34,23] cannot find symbol
+  symbol:   method setStatus(java.lang.String)
+  location: variable candidate1 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[35,23] cannot find symbol
+  symbol:   method setAppliedJobTitle(java.lang.String)
+  location: variable candidate1 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[36,23] cannot find symbol
+  symbol:   method setExpectedSalary(int)
+  location: variable candidate1 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[37,23] cannot find symbol
+  symbol:   method setCv(java.lang.String)
+  location: variable candidate1 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[38,32] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[40,36] constructor Candidate in class md.utm.proiect_Tmppp.entity.Candidate cannot be applied to given types;
+  required: no arguments
+  found:    java.lang.String,java.lang.String
+  reason: actual and formal argument lists differ in length
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[41,23] cannot find symbol
+  symbol:   method setSkill(java.lang.String)
+  location: variable candidate2 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[42,23] cannot find symbol
+  symbol:   method setStatus(java.lang.String)
+  location: variable candidate2 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[43,23] cannot find symbol
+  symbol:   method setAppliedJobTitle(java.lang.String)
+  location: variable candidate2 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[44,23] cannot find symbol
+  symbol:   method setExpectedSalary(int)
+  location: variable candidate2 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[45,23] cannot find symbol
+  symbol:   method setCv(java.lang.String)
+  location: variable candidate2 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[46,32] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[49,33] cannot find symbol
+  symbol:   method count()
+  location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[52,21] void cannot be dereferenced
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[56,17] cannot find symbol
+  symbol:   method setDomain(java.lang.String)
+  location: variable job1 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[57,17] cannot find symbol
+  symbol:   method setLocation(java.lang.String)
+  location: variable job1 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[58,17] cannot find symbol
+  symbol:   method setExperienceLevel(java.lang.String)
+  location: variable job1 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[59,17] cannot find symbol
+  symbol:   method setApproved(boolean)
+  location: variable job1 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[60,33] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.JobListing)
+  location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[63,21] void cannot be dereferenced
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[67,17] cannot find symbol
+  symbol:   method setDomain(java.lang.String)
+  location: variable job2 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[68,17] cannot find symbol
+  symbol:   method setLocation(java.lang.String)
+  location: variable job2 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[69,17] cannot find symbol
+  symbol:   method setExperienceLevel(java.lang.String)
+  location: variable job2 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[70,17] cannot find symbol
+  symbol:   method setApproved(boolean)
+  location: variable job2 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[71,33] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.JobListing)
+  location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[74,21] void cannot be dereferenced
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[78,17] cannot find symbol
+  symbol:   method setDomain(java.lang.String)
+  location: variable job3 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[79,17] cannot find symbol
+  symbol:   method setLocation(java.lang.String)
+  location: variable job3 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[80,17] cannot find symbol
+  symbol:   method setExperienceLevel(java.lang.String)
+  location: variable job3 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[81,17] cannot find symbol
+  symbol:   method setApproved(boolean)
+  location: variable job3 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[82,33] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.JobListing)
+  location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[85,30] cannot find symbol
+  symbol:   method count()
+  location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[97,30] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+  location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[98,30] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+  location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/RegisterController.java:[41,26] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+  location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[18,50] cannot find symbol
+  symbol:   method findById(java.lang.Long)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[28,50] cannot find symbol
+  symbol:   method findById(java.lang.Long)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[32,32] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[40,50] cannot find symbol
+  symbol:   method findById(java.lang.Long)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[44,32] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[52,50] cannot find symbol
+  symbol:   method findById(java.lang.Long)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[56,32] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[60,60] cannot find symbol
+  symbol:   method count()
+  location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[61,65] cannot find symbol
+  symbol:   method count()
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[106,57] cannot find symbol
+  symbol:   method findAll()
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[107,53] cannot find symbol
+  symbol:   method findAll()
+  location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[108,48] cannot find symbol
+  symbol:   method findAll()
+  location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[109,50] invalid method reference
+  cannot find symbol
+    symbol:   method isApproved(T)
+    location: class md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[127,61] cannot find symbol
+  symbol:   method findAll()
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[148,39] cannot find symbol
+  symbol:   method getName()
+  location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[149,40] cannot find symbol
+  symbol:   method getEmail()
+  location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[150,21] cannot find symbol
+  symbol:   method setSkill(candidate.[...]"N/A")
+  location: variable newCandidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[150,40] cannot find symbol
+  symbol:   method getSkill()
+  location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[150,71] cannot find symbol
+  symbol:   method getSkill()
+  location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[151,21] cannot find symbol
+  symbol:   method setStatus(java.lang.String)
+  location: variable newCandidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[152,37] cannot find symbol
+  symbol:   method getCv()
+  location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[153,28] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[162,28] cannot find symbol
+  symbol:   method findById(java.lang.Long)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[175,28] cannot find symbol
+  symbol:   method findById(java.lang.Long)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[191,56] cannot find symbol
+  symbol:   method findAll()
+  location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[193,25] invalid method reference
+  cannot find symbol
+    symbol:   method isApproved(T)
+    location: class md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[224,54] cannot find symbol
+  symbol:   method findAll()
+  location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[234,100] cannot find symbol
+  symbol:   method findAll()
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[237,56] cannot find symbol
+  symbol:   method findAll()
+  location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[238,25] invalid method reference
+  cannot find symbol
+    symbol:   method isApproved()
+    location: class md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[242,56] cannot find symbol
+  symbol:   method getId()
+  location: variable job of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[248,65] cannot find symbol
+  symbol:   method count()
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[255,76] cannot find symbol
+  symbol:   method getStatus()
+  location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[255,131] cannot find symbol
+  symbol:   method getStatus()
+  location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[274,64] cannot find symbol
+  symbol:   method findById(java.lang.Long)
+  location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[279,39] constructor Candidate in class md.utm.proiect_Tmppp.entity.Candidate cannot be applied to given types;
+  required: no arguments
+  found:    java.lang.String,java.lang.String
+  reason: actual and formal argument lists differ in length
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[280,26] cannot find symbol
+  symbol:   method setSkill(java.lang.String)
+  location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[281,26] cannot find symbol
+  symbol:   method setAppliedJobTitle(java.lang.String)
+  location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[282,26] cannot find symbol
+  symbol:   method setExpectedSalary(double)
+  location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[283,26] cannot find symbol
+  symbol:   method setCv(java.lang.String)
+  location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[284,26] cannot find symbol
+  symbol:   method setRecruiterMessage(java.lang.String)
+  location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[285,36] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+  location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[287,34] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+  location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[293,20] cannot find symbol
+  symbol:   method setApplicationDetails(java.lang.String,java.lang.String)
+  location: variable subject of type md.utm.proiect_Tmppp.observer.JobApplicationSubject
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[294,20] cannot find symbol
+  symbol:   method updateStatus(java.lang.String)
+  location: variable subject of type md.utm.proiect_Tmppp.observer.JobApplicationSubject
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[320,26] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+  location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[343,26] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+  location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[358,26] cannot find symbol
+  symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+  location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[376,78] cannot find symbol
+  symbol:   method findById(java.lang.Long)
+  location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[379,12] cannot find symbol
+  symbol:   method setDomain(java.lang.String)
+  location: variable job of type md.utm.proiect_Tmppp.entity.JobListing
+[INFO] 100 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  8.246 s
+[INFO] Finished at: 2026-05-11T20:37:17+03:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.14.1:compile (default-compile) on project proiect_Tmppp: Compilation failure: Compilation failure: 
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/repository/AppUserRepository.java:[4,47] package org.springframework.data.jpa.repository does not exist
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/repository/AppUserRepository.java:[10,44] cannot find symbol
+[ERROR]   symbol: class JpaRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[5,2] cannot find symbol
+[ERROR]   symbol: class Entity
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[6,2] cannot find symbol
+[ERROR]   symbol: class Table
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[3,1] package jakarta.persistence does not exist
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[9,6] cannot find symbol
+[ERROR]   symbol:   class Id
+[ERROR]   location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[10,6] cannot find symbol
+[ERROR]   symbol:   class GeneratedValue
+[ERROR]   location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[10,32] cannot find symbol
+[ERROR]   symbol:   variable GenerationType
+[ERROR]   location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[20,6] cannot find symbol
+[ERROR]   symbol:   class Column
+[ERROR]   location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[22,6] cannot find symbol
+[ERROR]   symbol:   class Column
+[ERROR]   location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[24,6] cannot find symbol
+[ERROR]   symbol:   class Column
+[ERROR]   location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/entity/AppUser.java:[26,6] cannot find symbol
+[ERROR]   symbol:   class Column
+[ERROR]   location: class md.utm.proiect_Tmppp.entity.AppUser
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[31,32] cannot find symbol
+[ERROR]   symbol:   method count()
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[32,36] constructor Candidate in class md.utm.proiect_Tmppp.entity.Candidate cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    java.lang.String,java.lang.String
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[33,23] cannot find symbol
+[ERROR]   symbol:   method setSkill(java.lang.String)
+[ERROR]   location: variable candidate1 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[34,23] cannot find symbol
+[ERROR]   symbol:   method setStatus(java.lang.String)
+[ERROR]   location: variable candidate1 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[35,23] cannot find symbol
+[ERROR]   symbol:   method setAppliedJobTitle(java.lang.String)
+[ERROR]   location: variable candidate1 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[36,23] cannot find symbol
+[ERROR]   symbol:   method setExpectedSalary(int)
+[ERROR]   location: variable candidate1 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[37,23] cannot find symbol
+[ERROR]   symbol:   method setCv(java.lang.String)
+[ERROR]   location: variable candidate1 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[38,32] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[40,36] constructor Candidate in class md.utm.proiect_Tmppp.entity.Candidate cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    java.lang.String,java.lang.String
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[41,23] cannot find symbol
+[ERROR]   symbol:   method setSkill(java.lang.String)
+[ERROR]   location: variable candidate2 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[42,23] cannot find symbol
+[ERROR]   symbol:   method setStatus(java.lang.String)
+[ERROR]   location: variable candidate2 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[43,23] cannot find symbol
+[ERROR]   symbol:   method setAppliedJobTitle(java.lang.String)
+[ERROR]   location: variable candidate2 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[44,23] cannot find symbol
+[ERROR]   symbol:   method setExpectedSalary(int)
+[ERROR]   location: variable candidate2 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[45,23] cannot find symbol
+[ERROR]   symbol:   method setCv(java.lang.String)
+[ERROR]   location: variable candidate2 of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[46,32] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[49,33] cannot find symbol
+[ERROR]   symbol:   method count()
+[ERROR]   location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[52,21] void cannot be dereferenced
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[56,17] cannot find symbol
+[ERROR]   symbol:   method setDomain(java.lang.String)
+[ERROR]   location: variable job1 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[57,17] cannot find symbol
+[ERROR]   symbol:   method setLocation(java.lang.String)
+[ERROR]   location: variable job1 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[58,17] cannot find symbol
+[ERROR]   symbol:   method setExperienceLevel(java.lang.String)
+[ERROR]   location: variable job1 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[59,17] cannot find symbol
+[ERROR]   symbol:   method setApproved(boolean)
+[ERROR]   location: variable job1 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[60,33] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.JobListing)
+[ERROR]   location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[63,21] void cannot be dereferenced
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[67,17] cannot find symbol
+[ERROR]   symbol:   method setDomain(java.lang.String)
+[ERROR]   location: variable job2 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[68,17] cannot find symbol
+[ERROR]   symbol:   method setLocation(java.lang.String)
+[ERROR]   location: variable job2 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[69,17] cannot find symbol
+[ERROR]   symbol:   method setExperienceLevel(java.lang.String)
+[ERROR]   location: variable job2 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[70,17] cannot find symbol
+[ERROR]   symbol:   method setApproved(boolean)
+[ERROR]   location: variable job2 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[71,33] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.JobListing)
+[ERROR]   location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[74,21] void cannot be dereferenced
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[78,17] cannot find symbol
+[ERROR]   symbol:   method setDomain(java.lang.String)
+[ERROR]   location: variable job3 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[79,17] cannot find symbol
+[ERROR]   symbol:   method setLocation(java.lang.String)
+[ERROR]   location: variable job3 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[80,17] cannot find symbol
+[ERROR]   symbol:   method setExperienceLevel(java.lang.String)
+[ERROR]   location: variable job3 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[81,17] cannot find symbol
+[ERROR]   symbol:   method setApproved(boolean)
+[ERROR]   location: variable job3 of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[82,33] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.JobListing)
+[ERROR]   location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[85,30] cannot find symbol
+[ERROR]   symbol:   method count()
+[ERROR]   location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[97,30] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+[ERROR]   location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/DataInitializer.java:[98,30] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+[ERROR]   location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/RegisterController.java:[41,26] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+[ERROR]   location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[18,50] cannot find symbol
+[ERROR]   symbol:   method findById(java.lang.Long)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[28,50] cannot find symbol
+[ERROR]   symbol:   method findById(java.lang.Long)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[32,32] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[40,50] cannot find symbol
+[ERROR]   symbol:   method findById(java.lang.Long)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[44,32] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[52,50] cannot find symbol
+[ERROR]   symbol:   method findById(java.lang.Long)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/StateController.java:[56,32] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[60,60] cannot find symbol
+[ERROR]   symbol:   method count()
+[ERROR]   location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[61,65] cannot find symbol
+[ERROR]   symbol:   method count()
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[106,57] cannot find symbol
+[ERROR]   symbol:   method findAll()
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[107,53] cannot find symbol
+[ERROR]   symbol:   method findAll()
+[ERROR]   location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[108,48] cannot find symbol
+[ERROR]   symbol:   method findAll()
+[ERROR]   location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[109,50] invalid method reference
+[ERROR]   cannot find symbol
+[ERROR]     symbol:   method isApproved(T)
+[ERROR]     location: class md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[127,61] cannot find symbol
+[ERROR]   symbol:   method findAll()
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[148,39] cannot find symbol
+[ERROR]   symbol:   method getName()
+[ERROR]   location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[149,40] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[150,21] cannot find symbol
+[ERROR]   symbol:   method setSkill(candidate.[...]"N/A")
+[ERROR]   location: variable newCandidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[150,40] cannot find symbol
+[ERROR]   symbol:   method getSkill()
+[ERROR]   location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[150,71] cannot find symbol
+[ERROR]   symbol:   method getSkill()
+[ERROR]   location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[151,21] cannot find symbol
+[ERROR]   symbol:   method setStatus(java.lang.String)
+[ERROR]   location: variable newCandidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[152,37] cannot find symbol
+[ERROR]   symbol:   method getCv()
+[ERROR]   location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[153,28] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[162,28] cannot find symbol
+[ERROR]   symbol:   method findById(java.lang.Long)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[175,28] cannot find symbol
+[ERROR]   symbol:   method findById(java.lang.Long)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[191,56] cannot find symbol
+[ERROR]   symbol:   method findAll()
+[ERROR]   location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[193,25] invalid method reference
+[ERROR]   cannot find symbol
+[ERROR]     symbol:   method isApproved(T)
+[ERROR]     location: class md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[224,54] cannot find symbol
+[ERROR]   symbol:   method findAll()
+[ERROR]   location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[234,100] cannot find symbol
+[ERROR]   symbol:   method findAll()
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[237,56] cannot find symbol
+[ERROR]   symbol:   method findAll()
+[ERROR]   location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[238,25] invalid method reference
+[ERROR]   cannot find symbol
+[ERROR]     symbol:   method isApproved()
+[ERROR]     location: class md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[242,56] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable job of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[248,65] cannot find symbol
+[ERROR]   symbol:   method count()
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[255,76] cannot find symbol
+[ERROR]   symbol:   method getStatus()
+[ERROR]   location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[255,131] cannot find symbol
+[ERROR]   symbol:   method getStatus()
+[ERROR]   location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[274,64] cannot find symbol
+[ERROR]   symbol:   method findById(java.lang.Long)
+[ERROR]   location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[279,39] constructor Candidate in class md.utm.proiect_Tmppp.entity.Candidate cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    java.lang.String,java.lang.String
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[280,26] cannot find symbol
+[ERROR]   symbol:   method setSkill(java.lang.String)
+[ERROR]   location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[281,26] cannot find symbol
+[ERROR]   symbol:   method setAppliedJobTitle(java.lang.String)
+[ERROR]   location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[282,26] cannot find symbol
+[ERROR]   symbol:   method setExpectedSalary(double)
+[ERROR]   location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[283,26] cannot find symbol
+[ERROR]   symbol:   method setCv(java.lang.String)
+[ERROR]   location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[284,26] cannot find symbol
+[ERROR]   symbol:   method setRecruiterMessage(java.lang.String)
+[ERROR]   location: variable candidate of type md.utm.proiect_Tmppp.entity.Candidate
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[285,36] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.Candidate)
+[ERROR]   location: variable candidateRepository of type md.utm.proiect_Tmppp.repository.CandidateRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[287,34] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+[ERROR]   location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[293,20] cannot find symbol
+[ERROR]   symbol:   method setApplicationDetails(java.lang.String,java.lang.String)
+[ERROR]   location: variable subject of type md.utm.proiect_Tmppp.observer.JobApplicationSubject
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[294,20] cannot find symbol
+[ERROR]   symbol:   method updateStatus(java.lang.String)
+[ERROR]   location: variable subject of type md.utm.proiect_Tmppp.observer.JobApplicationSubject
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[320,26] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+[ERROR]   location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[343,26] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+[ERROR]   location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[358,26] cannot find symbol
+[ERROR]   symbol:   method save(md.utm.proiect_Tmppp.entity.AppUser)
+[ERROR]   location: variable appUserRepository of type md.utm.proiect_Tmppp.repository.AppUserRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[376,78] cannot find symbol
+[ERROR]   symbol:   method findById(java.lang.Long)
+[ERROR]   location: variable jobListingRepository of type md.utm.proiect_Tmppp.repository.JobListingRepository
+[ERROR] /c:/Users/valer/OneDrive/Desktop/proiect_Tmppp/proiect_Tmppp/src/main/java/md/utm/proiect_Tmppp/controller/WebController.java:[379,12] cannot find symbol
+[ERROR]   symbol:   method setDomain(java.lang.String)
+[ERROR]   location: variable job of type md.utm.proiect_Tmppp.entity.JobListing
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

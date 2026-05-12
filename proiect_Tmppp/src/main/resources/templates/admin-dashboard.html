@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { margin: 0; font-family: Inter, "Segoe UI", sans-serif; background: #f4f7fb; color: #172033; }
+        .layout { display: grid; grid-template-columns: 270px 1fr; min-height: 100vh; }
+        .sidebar { background: #111827; color: #dbeafe; padding: 1.25rem; position: sticky; top: 0; height: 100vh; }
+        .brand { color: #fff; text-decoration: none; font-weight: 850; display: block; margin-bottom: 2rem; }
+        .side-link { display: block; color: #cbd5e1; text-decoration: none; padding: .75rem .85rem; border-radius: 8px; margin-bottom: .35rem; font-weight: 650; }
+        .side-link.active, .side-link:hover { background: rgba(255,255,255,.1); color: #fff; }
+        .main { padding: 2rem; }
+        .cardx { background: #fff; border: 1px solid #e4ebf3; border-radius: 8px; padding: 1.1rem; height: 100%; }
+        .stat strong { display: block; font-size: 2rem; line-height: 1; }
+        .stat span { color: #64748b; font-weight: 650; }
+        .table-wrap { overflow-x: auto; }
+        table { min-width: 900px; }
+        .btn-main { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 750; border-radius: 8px; }
+        .btn-danger-soft { background: #fee2e2; color: #991b1b; border: 0; font-weight: 750; border-radius: 8px; }
+        .btn-ok-soft { background: #dcfce7; color: #166534; border: 0; font-weight: 750; border-radius: 8px; }
+        .chart { height: 180px; display: flex; gap: 1rem; align-items: end; border-bottom: 1px solid #dbe4ef; padding: 0 1rem; }
+        .chart span { flex: 1; background: #2563eb; border-radius: 6px 6px 0 0; min-height: 24px; position: relative; }
+        .chart span::after { content: attr(data-label); position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%); color: #64748b; font-size: .8rem; white-space: nowrap; }
+        .form-control, .form-select { min-width: 120px; }
+        @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } .sidebar { height: auto; position: relative; } .main { padding: 1rem; } }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <a class="brand" th:href="@{/}">RecruitPro Admin</a>
+        <a class="side-link" th:href="@{/}">Acasa</a>
+        <a class="side-link active" th:href="@{/admin-dashboard}">Dashboard</a>
+        <a class="side-link" th:href="@{/jobs}">Joburi publice</a>
+        <a class="side-link" href="#jobs-admin">Management joburi</a>
+        <a class="side-link" href="#applications">Aplicatii</a>
+        <a class="side-link" href="#users">Utilizatori</a>
+        <a class="side-link" th:href="@{/logout}">Logout</a>
+    </aside>
+
+    <main class="main">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+            <div>
+                <p class="text-uppercase text-secondary fw-bold mb-1">Panou de control</p>
+                <h1 class="fw-bold mb-0">Dashboard admin</h1>
+            </div>
+            <span class="badge text-bg-dark p-3" th:text="${currentUser}">Admin</span>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-3"><div class="cardx stat"><strong th:text="${jobs.size()}">0</strong><span>joburi totale</span></div></div>
+            <div class="col-md-3"><div class="cardx stat"><strong th:text="${approvedJobs}">0</strong><span>joburi aprobate</span></div></div>
+            <div class="col-md-3"><div class="cardx stat"><strong th:text="${candidates.size()}">0</strong><span>aplicatii</span></div></div>
+            <div class="col-md-3"><div class="cardx stat"><strong th:text="${activeUsers}">0</strong><span>utilizatori activi</span></div></div>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-lg-7">
+                <section class="cardx">
+                    <h2 class="h5 fw-bold">Analytics live</h2>
+                    <div class="chart mt-4 mb-4">
+                        <span th:style="'height:' + (${jobs.size()} * 18 + 35) + 'px'" data-label="Joburi"></span>
+                        <span th:style="'height:' + (${candidates.size()} * 18 + 35) + 'px'" data-label="Aplicatii"></span>
+                        <span th:style="'height:' + (${users.size()} * 18 + 35) + 'px'" data-label="Useri"></span>
+                        <span th:style="'height:' + (${pendingJobs} * 25 + 35) + 'px'" data-label="Pending"></span>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-5">
+                <section class="cardx">
+                    <h2 class="h5 fw-bold">Notificare globala</h2>
+                    <form th:action="@{/admin/notify}" method="post">
+                        <textarea class="form-control" name="notification" rows="5" placeholder="Mesaj pentru toti utilizatorii..." required></textarea>
+                        <button class="btn btn-main mt-3" type="submit">Trimite notificare</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+
+        <section class="cardx mb-3" id="jobs-admin">
+            <h2 class="h5 fw-bold">Adauga job</h2>
+            <form class="row g-2 align-items-end" th:action="@{/admin/jobs/save}" method="post">
+                <div class="col-lg-2"><label class="form-label">Titlu</label><input class="form-control" name="title" required></div>
+                <div class="col-lg-3"><label class="form-label">Descriere</label><input class="form-control" name="description" required></div>
+                <div class="col-lg-2"><label class="form-label">Domeniu</label><input class="form-control" name="domain" required></div>
+                <div class="col-lg-1"><label class="form-label">Locatie</label><input class="form-control" name="location" required></div>
+                <div class="col-lg-1"><label class="form-label">Nivel</label><input class="form-control" name="experienceLevel" required></div>
+                <div class="col-lg-1"><label class="form-label">Salariu</label><input class="form-control" name="salary" type="number" step="100" required></div>
+                <div class="col-lg-1 form-check ms-2"><input class="form-check-input" type="checkbox" name="approved" value="true" id="approvedNew"><label class="form-check-label" for="approvedNew">Aprobat</label></div>
+                <div class="col-lg-1"><button class="btn btn-main w-100" type="submit">Salveaza</button></div>
+            </form>
+        </section>
+
+        <section class="cardx mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Management date joburi</h2>
+                <span class="text-secondary">editare, aprobare, respingere, eliminare</span>
+            </div>
+            <div class="table-wrap">
+                <table class="table align-middle">
+                    <thead><tr><th>Titlu</th><th>Domeniu</th><th>Locatie</th><th>Nivel</th><th>Salariu</th><th>Status</th><th>Actiuni</th></tr></thead>
+                    <tbody>
+                    <tr th:each="job : ${jobs}">
+                        <form th:action="@{/admin/jobs/save}" method="post">
+                            <input type="hidden" name="id" th:value="${job.id}">
+                            <td><input class="form-control" name="title" th:value="${job.title}"></td>
+                            <td><input class="form-control" name="domain" th:value="${job.domain}"></td>
+                            <td><input class="form-control" name="location" th:value="${job.location}"></td>
+                            <td><input class="form-control" name="experienceLevel" th:value="${job.experienceLevel}"></td>
+                            <td><input class="form-control" type="number" name="salary" th:value="${job.salary}"></td>
+                            <td>
+                                <input type="hidden" name="description" th:value="${job.description}">
+                                <input type="hidden" name="approved" th:value="${job.approved}">
+                                <span class="badge" th:classappend="${job.approved} ? ' text-bg-success' : ' text-bg-warning'" th:text="${job.approved ? 'Aprobat' : 'In asteptare'}">Status</span>
+                            </td>
+                            <td class="d-flex gap-2">
+                                <button class="btn btn-sm btn-main" type="submit">Update</button>
+                        </form>
+                                <form th:action="@{'/admin/jobs/approval/' + ${job.id}}" method="post">
+                                    <input type="hidden" name="approved" th:value="${!job.approved}">
+                                    <button class="btn btn-sm btn-ok-soft" type="submit" th:text="${job.approved ? 'Respinge' : 'Aproba'}">Aproba</button>
+                                </form>
+                                <form th:action="@{'/admin/jobs/delete/' + ${job.id}}" method="post">
+                                    <button class="btn btn-sm btn-danger-soft" type="submit">Sterge</button>
+                                </form>
+                            </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="cardx mb-3" id="applications">
+            <h2 class="h5 fw-bold">Aplicatii si candidati</h2>
+            <div class="table-wrap">
+                <table class="table align-middle">
+                    <thead><tr><th>Candidat</th><th>Email</th><th>Job</th><th>Skill</th><th>Status</th><th>Actiuni</th></tr></thead>
+                    <tbody>
+                    <tr th:each="candidate : ${candidates}">
+                        <td th:text="${candidate.name}">Nume</td>
+                        <td th:text="${candidate.email}">Email</td>
+                        <td th:text="${candidate.appliedJobTitle ?: 'General'}">Job</td>
+                        <td th:text="${candidate.skill}">Skill</td>
+                        <td><span class="badge text-bg-light" th:text="${candidate.status}">Applied</span></td>
+                        <td class="d-flex gap-2">
+                            <form th:action="@{'/candidates/evaluate/' + ${candidate.id}}" method="post"><button class="btn btn-sm btn-main" type="submit">Evalueaza</button></form>
+                            <form th:action="@{'/candidates/approve/' + ${candidate.id}}" method="post"><button class="btn btn-sm btn-ok-soft" type="submit">Accepta</button></form>
+                            <form th:action="@{'/candidates/reject/' + ${candidate.id}}" method="post"><button class="btn btn-sm btn-danger-soft" type="submit">Respinge</button></form>
+                            <a class="btn btn-sm btn-outline-dark" th:href="@{'/candidates/cv/' + ${candidate.id}}">CV</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="cardx" id="users">
+            <h2 class="h5 fw-bold">Utilizatori si permisiuni</h2>
+            <div class="table-wrap">
+                <table class="table align-middle">
+                    <thead><tr><th>Nume</th><th>Username</th><th>Rol</th><th>Domeniu</th><th>Status</th><th>Actiuni</th></tr></thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.fullName}">Nume</td>
+                        <td th:text="${user.username}">Username</td>
+                        <td><span class="badge text-bg-dark" th:text="${user.role}">Rol</span></td>
+                        <td th:text="${user.domainPreference}">Domeniu</td>
+                        <td th:text="${user.active ? 'Activ' : 'Suspendat'}">Activ</td>
+                        <td>
+                            <form th:action="@{'/admin/users/toggle/' + ${user.id}}" method="post">
+                                <button class="btn btn-sm btn-outline-dark" type="submit" th:text="${user.active ? 'Suspenda' : 'Activeaza'}">Toggle</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

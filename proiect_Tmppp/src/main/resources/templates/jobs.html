@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joburi disponibile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { margin: 0; font-family: Inter, "Segoe UI", sans-serif; background: #f4f7fb; color: #172033; }
+        .layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        .sidebar { background: #102a43; color: #dbeafe; padding: 1.25rem; position: sticky; top: 0; height: 100vh; }
+        .brand { color: #fff; text-decoration: none; font-weight: 850; display: block; margin-bottom: 2rem; }
+        .side-link { display: block; color: #bfdbfe; text-decoration: none; padding: .75rem .85rem; border-radius: 8px; margin-bottom: .35rem; font-weight: 650; }
+        .side-link.active, .side-link:hover { background: rgba(255,255,255,.1); color: #fff; }
+        .main { padding: 2rem; }
+        .panel { background: #fff; border: 1px solid #e4ebf3; border-radius: 8px; padding: 1rem; }
+        .job-card { background: #fff; border: 1px solid #e4ebf3; border-radius: 8px; padding: 1.25rem; height: 100%; display: flex; flex-direction: column; gap: .75rem; }
+        .job-card h2 { font-size: 1.2rem; font-weight: 850; margin: 0; }
+        .tag { display: inline-flex; align-items: center; padding: .35rem .6rem; border-radius: 999px; background: #eef6ff; color: #174b66; font-size: .82rem; font-weight: 750; margin: .15rem .2rem .15rem 0; }
+        .btn-main { background: #0f766e; border-color: #0f766e; color: #fff; font-weight: 750; border-radius: 8px; }
+        .btn-lightline { border: 1px solid #d7e1ec; background: #fff; border-radius: 8px; font-weight: 750; }
+        .salary { color: #0f766e; font-weight: 850; font-size: 1.15rem; }
+        @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .sidebar { height: auto; position: relative; } .main { padding: 1rem; } }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <a class="brand" th:href="@{/}">RecruitPro</a>
+        <a class="side-link" th:href="@{/}">Acasa</a>
+        <a class="side-link active" th:href="@{/jobs}">Joburi</a>
+        <a class="side-link" th:href="@{/user-dashboard}" th:if="${currentRole == 'USER'}">Dashboard user</a>
+        <a class="side-link" th:href="@{/admin-dashboard}" th:if="${currentRole == 'ADMIN'}">Dashboard admin</a>
+        <a class="side-link" th:href="@{/login}" th:if="${currentRole == null}">Autentificare</a>
+        <a class="side-link" th:href="@{/logout}" th:if="${currentRole != null}">Logout</a>
+    </aside>
+
+    <main class="main">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+            <div>
+                <p class="text-uppercase text-secondary fw-bold mb-1">Cautare inteligenta</p>
+                <h1 class="fw-bold mb-0">Joburi disponibile</h1>
+            </div>
+            <span class="badge text-bg-light p-3" th:text="${jobs != null ? jobs.size() + ' rezultate' : '0 rezultate'}">0 rezultate</span>
+        </div>
+
+        <div th:if="${jobMessage}" class="alert alert-info" th:text="${jobMessage}"></div>
+
+        <form class="panel mb-4" th:action="@{/jobs}" method="get">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-3">
+                    <label class="form-label">Cuvinte cheie</label>
+                    <input class="form-control" name="query" th:value="${query}" placeholder="Java, manager, QA">
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label">Domeniu</label>
+                    <select class="form-select" name="domain">
+                        <option value="">Toate</option>
+                        <option th:each="item : ${domains != null ? domains : {}}" th:value="${item}" th:text="${item}" th:selected="${item == domain}"></option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label">Locatie</label>
+                    <select class="form-select" name="location">
+                        <option value="">Toate</option>
+                        <option th:each="item : ${locations != null ? locations : {}}" th:value="${item}" th:text="${item}" th:selected="${item == location}"></option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label">Experienta</label>
+                    <select class="form-select" name="experience">
+                        <option value="">Orice nivel</option>
+                        <option th:each="item : ${experiences != null ? experiences : {}}" th:value="${item}" th:text="${item}" th:selected="${item == experience}"></option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label">Salariu minim</label>
+                    <input class="form-control" type="number" name="minSalary" th:value="${minSalary}" min="0" step="100">
+                </div>
+                <div class="col-lg-1 d-grid">
+                    <button class="btn btn-main" type="submit">Cauta</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="row g-3">
+            <div class="col-xl-4 col-md-6" th:each="job : ${jobs != null ? jobs : {}}">
+                <article class="job-card">
+                    <div>
+                        <h2 th:text="${job.title}">Titlu job</h2>
+                        <div class="mt-2">
+                            <span class="tag" th:text="${job.domain}">Domeniu</span>
+                            <span class="tag" th:text="${job.location}">Locatie</span>
+                            <span class="tag" th:text="${job.experienceLevel}">Nivel</span>
+                        </div>
+                    </div>
+                    <p class="text-secondary flex-grow-1" th:text="${job.description}">Descriere</p>
+                    <div class="salary"><span th:text="${#numbers.formatDecimal(job.salary, 0, 0)}">0</span> MDL</div>
+                    <div class="d-flex gap-2">
+                        <form th:action="@{'/jobs/apply/' + ${job.id}}" method="post" class="flex-fill">
+                            <button type="submit" class="btn btn-main w-100">Aplica</button>
+                        </form>
+                        <form th:action="@{'/jobs/favorite/' + ${job.id}}" method="post">
+                            <button type="submit" class="btn btn-lightline" th:text="${favoriteIds != null and favoriteIds.contains(job.id) ? 'Salvat' : 'Salveaza'}">Salveaza</button>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

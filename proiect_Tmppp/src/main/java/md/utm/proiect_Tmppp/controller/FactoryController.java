@@ -40,6 +40,6 @@ public class FactoryController {
         JobListing job = factory.createJobListing();
 
         return "User: " + user.getClass().getSimpleName() +
-                " | JobListing creat";
+                " | JobListing creat: " + job.getClass().getSimpleName();
     }
 }
