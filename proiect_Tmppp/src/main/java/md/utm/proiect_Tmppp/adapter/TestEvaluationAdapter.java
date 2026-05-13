@@ -1,20 +1,34 @@
 package md.utm.proiect_Tmppp.adapter;
 
-public class TestEvaluationAdapter implements CandidateTestEvaluator {
+import md.utm.proiect_Tmppp.entity.Candidate;
 
-    private ExternalTestAnalysisService adaptee;
+// Adapter: transforma evaluateCandidate() din platforma in analyzeExam() pentru serviciul extern.
+public class TestEvaluationAdapter implements CandidateEvaluator, CandidateTestEvaluator {
 
-    public TestEvaluationAdapter(ExternalTestAnalysisService adaptee) {
+    private ExternalEvaluationService adaptee;
+
+    public TestEvaluationAdapter(ExternalEvaluationService adaptee) {
         this.adaptee = adaptee;
     }
 
     @Override
-    public String evaluateTest(String candidateName, String testName, int score) {
-        String specialData = convertToServiceFormat(candidateName, testName, score);
+    public String evaluateCandidate(Candidate candidate, int testScore) {
+        String specialData = convertToServiceFormat(
+                candidate.getName(),
+                candidate.getAppliedJobTitle() == null ? "Technical Test" : candidate.getAppliedJobTitle(),
+                testScore,
+                candidate.getSkill()
+        );
         return adaptee.analyzeExam(specialData);
     }
 
-    private String convertToServiceFormat(String candidateName, String testName, int score) {
+    @Override
+    public String evaluateTest(String candidateName, String testName, int score) {
+        String specialData = convertToServiceFormat(candidateName, testName, score, "N/A");
+        return adaptee.analyzeExam(specialData);
+    }
+
+    private String convertToServiceFormat(String candidateName, String testName, int score, String skills) {
         String level;
 
         if (score >= 85) {
@@ -28,6 +42,7 @@ public class TestEvaluationAdapter implements CandidateTestEvaluator {
         return "CANDIDATE=" + candidateName +
                 ";TEST=" + testName +
                 ";SCORE=" + score +
-                ";LEVEL=" + level;
+                ";LEVEL=" + level +
+                ";SKILLS=" + (skills == null || skills.isBlank() ? "N/A" : skills);
     }
 }
