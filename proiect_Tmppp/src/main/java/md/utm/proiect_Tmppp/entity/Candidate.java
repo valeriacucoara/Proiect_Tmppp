@@ -2,26 +2,20 @@ package md.utm.proiect_Tmppp.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import md.utm.proiect_Tmppp.state.CandidateState;
 
 @Entity
 @Table(name = "candidate")
-public class Candidate implements User {
+// Concrete Product: utilizator de tip candidat creat de CandidateFactory.
+public class Candidate extends User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String name;
-    private String email;
     private String skill;
     private String status;
     private String appliedJobTitle;
+
+    @Column(length = 1000)
     private String recruiterMessage;
     private double expectedSalary;
 
@@ -32,38 +26,16 @@ public class Candidate implements User {
     private CandidateState state;
 
     public Candidate() {
+        setUserType("Candidate");
     }
 
     public Candidate(String name, String email) {
-        this.name = name;
-        this.email = email;
+        setName(name);
+        setEmail(email);
+        setUserType("Candidate");
         this.status = "Applied";
         this.recruiterMessage = "Aplicatia a fost primita si asteapta verificare.";
         this.cv = "CV not provided yet.";
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getSkill() {
