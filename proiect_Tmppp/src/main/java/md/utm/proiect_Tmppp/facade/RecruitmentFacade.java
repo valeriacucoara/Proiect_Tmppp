@@ -1,30 +1,35 @@
 package md.utm.proiect_Tmppp.facade;
 
+import java.util.ArrayList;
+import java.util.List;
+
+// Facade: ofera o singura metoda centrala pentru procesul complet de recrutare.
 public class RecruitmentFacade {
 
     private CandidateSubsystem candidateSubsystem;
     private JobSubsystem jobSubsystem;
-    private SkillSubsystem skillSubsystem;
-    private TestSubsystem testSubsystem;
-    private AdditionalRecruitmentFacade optionalAdditionalFacade;
+    private EvaluationSubsystem evaluationSubsystem;
+    private AnalysisSubsystem analysisSubsystem;
 
     public RecruitmentFacade() {
         this.candidateSubsystem = new CandidateSubsystem();
         this.jobSubsystem = new JobSubsystem();
-        this.skillSubsystem = new SkillSubsystem();
-        this.testSubsystem = new TestSubsystem();
-        this.optionalAdditionalFacade = new AdditionalRecruitmentFacade();
+        this.evaluationSubsystem = new EvaluationSubsystem();
+        this.analysisSubsystem = new AnalysisSubsystem();
     }
 
     public String subsystemOperation(String candidateName, String jobTitle, String skillName, String testName) {
-        StringBuilder result = new StringBuilder();
+        return String.join("\n", recruitmentProcess(candidateName, jobTitle, 85));
+    }
 
-        result.append(candidateSubsystem.createCandidate(candidateName)).append("\n");
-        result.append(jobSubsystem.assignJob(jobTitle)).append("\n");
-        result.append(skillSubsystem.addSkill(skillName)).append("\n");
-        result.append(testSubsystem.registerTest(testName)).append("\n");
-        result.append(optionalAdditionalFacade.anotherOperation(candidateName));
+    public List<String> recruitmentProcess(String candidateName, String jobTitle, int testScore) {
+        List<String> result = new ArrayList<>();
+        result.add(candidateSubsystem.verifyCandidate(candidateName));
+        result.add(jobSubsystem.analyzeJob(jobTitle));
+        result.add(evaluationSubsystem.evaluateTest(candidateName, testScore));
+        result.add(analysisSubsystem.generateFinalReport(candidateName, jobTitle, testScore));
+        result.add("Recruitment process completed successfully");
 
-        return result.toString();
+        return result;
     }
 }
