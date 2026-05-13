@@ -1,5 +1,6 @@
 package md.utm.proiect_Tmppp.state;
 
+// Concrete State: reprezinta candidatul respins in procesul de recrutare.
 public class RejectedState implements CandidateState {
     @Override
     public String handleStatus() {
@@ -19,8 +20,8 @@ public class RejectedState implements CandidateState {
 
     @Override
     public void accept(CandidateContext context) {
-        // Cannot accept rejected
-        System.out.println("Cannot accept rejected candidate.");
+        context.setState(new AcceptedState());
+        System.out.println("Rejected candidate moved to Accepted state.");
     }
 
     @Override

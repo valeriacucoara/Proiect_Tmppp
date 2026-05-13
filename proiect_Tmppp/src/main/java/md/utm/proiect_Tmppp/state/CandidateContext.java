@@ -2,6 +2,7 @@ package md.utm.proiect_Tmppp.state;
 
 import md.utm.proiect_Tmppp.entity.Candidate;
 
+// Context: pastreaza starea curenta a candidatului si deleaga actiunile catre starea concreta.
 public class CandidateContext {
     private CandidateState state;
     private Candidate candidate;

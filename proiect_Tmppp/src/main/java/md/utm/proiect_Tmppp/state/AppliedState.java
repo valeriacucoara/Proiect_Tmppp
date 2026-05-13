@@ -1,5 +1,6 @@
 package md.utm.proiect_Tmppp.state;
 
+// Concrete State: reprezinta candidatul care a aplicat si asteapta evaluarea recruiterului.
 public class AppliedState implements CandidateState {
     @Override
     public String handleStatus() {
@@ -19,8 +20,8 @@ public class AppliedState implements CandidateState {
 
     @Override
     public void accept(CandidateContext context) {
-        // Cannot accept without interview
-        System.out.println("Cannot accept candidate without interview.");
+        context.setState(new AcceptedState());
+        System.out.println("Candidate accepted directly from Applied state.");
     }
 
     @Override

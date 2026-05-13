@@ -1,5 +1,6 @@
 package md.utm.proiect_Tmppp.state;
 
+// Concrete State: reprezinta candidatul evaluat/intervievat, pregatit pentru decizie.
 public class InterviewedState implements CandidateState {
     @Override
     public String handleStatus() {
