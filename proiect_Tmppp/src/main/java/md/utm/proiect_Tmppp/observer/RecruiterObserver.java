@@ -1,5 +1,6 @@
 package md.utm.proiect_Tmppp.observer;
 
+// Concrete Observer: reprezinta recruiterul care primeste notificari despre candidati si joburi.
 public class RecruiterObserver implements Observer {
 
     private String name;
@@ -10,6 +11,6 @@ public class RecruiterObserver implements Observer {
 
     @Override
     public String update(String message) {
-        return "Recruiter " + name + " notificat: " + message;
+        return message;
     }
 }

@@ -1,5 +1,6 @@
 package md.utm.proiect_Tmppp.observer;
 
+// Concrete Observer: reprezinta candidatul care primeste notificari despre aplicatia sa.
 public class CandidateObserver implements Observer {
 
     private String name;
@@ -10,6 +11,6 @@ public class CandidateObserver implements Observer {
 
     @Override
     public String update(String message) {
-        return "Candidat " + name + " notificat: " + message;
+        return message;
     }
 }
