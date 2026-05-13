@@ -4,9 +4,11 @@ import md.utm.proiect_Tmppp.builder.JobListingBuilder;
 import md.utm.proiect_Tmppp.entity.AppUser;
 import md.utm.proiect_Tmppp.entity.Candidate;
 import md.utm.proiect_Tmppp.entity.JobListing;
+import md.utm.proiect_Tmppp.entity.Skill;
 import md.utm.proiect_Tmppp.repository.AppUserRepository;
 import md.utm.proiect_Tmppp.repository.CandidateRepository;
 import md.utm.proiect_Tmppp.repository.JobListingRepository;
+import md.utm.proiect_Tmppp.repository.SkillRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -17,13 +19,16 @@ public class DataInitializer implements ApplicationRunner {
     private final CandidateRepository candidateRepository;
     private final JobListingRepository jobListingRepository;
     private final AppUserRepository appUserRepository;
+    private final SkillRepository skillRepository;
 
     public DataInitializer(CandidateRepository candidateRepository,
                            JobListingRepository jobListingRepository,
-                           AppUserRepository appUserRepository) {
+                           AppUserRepository appUserRepository,
+                           SkillRepository skillRepository) {
         this.candidateRepository = candidateRepository;
         this.jobListingRepository = jobListingRepository;
         this.appUserRepository = appUserRepository;
+        this.skillRepository = skillRepository;
     }
 
     @Override
@@ -96,6 +101,15 @@ public class DataInitializer implements ApplicationRunner {
 
             appUserRepository.save(admin);
             appUserRepository.save(user);
+        }
+
+        if (skillRepository.count() == 0) {
+            skillRepository.save(new Skill("user", "Backend Skills", "Java"));
+            skillRepository.save(new Skill("user", "Backend Skills", "Spring Boot"));
+            skillRepository.save(new Skill("user", "Database Skills", "SQL"));
+            skillRepository.save(new Skill("user", "Frontend Skills", "HTML"));
+            skillRepository.save(new Skill("user", "Frontend Skills", "CSS"));
+            skillRepository.save(new Skill("user", "Soft Skills", "Communication"));
         }
     }
 }

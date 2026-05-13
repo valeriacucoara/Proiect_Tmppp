@@ -1,7 +1,7 @@
 package md.utm.proiect_Tmppp.controller;
 
 import md.utm.proiect_Tmppp.adapter.CandidateTestEvaluator;
-import md.utm.proiect_Tmppp.adapter.ExternalTestAnalysisService;
+import md.utm.proiect_Tmppp.adapter.ExternalEvaluationService;
 import md.utm.proiect_Tmppp.adapter.TestEvaluationAdapter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ public class AdapterController {
             @RequestParam int score
     ) {
         CandidateTestEvaluator evaluator =
-                new TestEvaluationAdapter(new ExternalTestAnalysisService());
+                new TestEvaluationAdapter(new ExternalEvaluationService());
 
         return evaluator.evaluateTest(candidateName, testName, score);
     }

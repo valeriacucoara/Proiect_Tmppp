@@ -1,27 +1,29 @@
 package md.utm.proiect_Tmppp.controller;
 
 import jakarta.servlet.http.HttpSession;
+import md.utm.proiect_Tmppp.command.ApproveCandidateCommand;
+import md.utm.proiect_Tmppp.command.CandidateReceiver;
+import md.utm.proiect_Tmppp.command.RecruiterInvoker;
+import md.utm.proiect_Tmppp.command.RejectCandidateCommand;
 import md.utm.proiect_Tmppp.entity.AppUser;
 import md.utm.proiect_Tmppp.entity.Candidate;
 import md.utm.proiect_Tmppp.entity.JobListing;
 import md.utm.proiect_Tmppp.factory.method.CandidateFactory;
-import md.utm.proiect_Tmppp.observer.CandidateObserver;
-import md.utm.proiect_Tmppp.observer.JobApplicationSubject;
-import md.utm.proiect_Tmppp.observer.RecruiterObserver;
 import md.utm.proiect_Tmppp.proxy.CandidateCvProxy;
 import md.utm.proiect_Tmppp.proxy.RealCandidateCvService;
 import md.utm.proiect_Tmppp.repository.AppUserRepository;
 import md.utm.proiect_Tmppp.repository.CandidateRepository;
 import md.utm.proiect_Tmppp.repository.JobListingRepository;
+import md.utm.proiect_Tmppp.service.CandidateAnalysisService;
+import md.utm.proiect_Tmppp.service.JobService;
+import md.utm.proiect_Tmppp.service.NotificationService;
+import md.utm.proiect_Tmppp.service.RecruitmentProcessService;
+import md.utm.proiect_Tmppp.service.SkillService;
+import md.utm.proiect_Tmppp.service.TestService;
 import md.utm.proiect_Tmppp.singleton.PlatformSettings;
-import md.utm.proiect_Tmppp.state.AcceptedState;
-import md.utm.proiect_Tmppp.state.RejectedState;
-import md.utm.proiect_Tmppp.strategy.CandidateEvaluator;
-import md.utm.proiect_Tmppp.strategy.CompositeEvaluationStrategy;
-import md.utm.proiect_Tmppp.strategy.ExperienceStrategy;
-import md.utm.proiect_Tmppp.strategy.ScoreStrategy;
-import md.utm.proiect_Tmppp.strategy.SkillStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
@@ -52,6 +55,27 @@ public class WebController {
     @Autowired
     private AppUserRepository appUserRepository;
 
+    @Autowired
+    private JobService jobService;
+
+    @Autowired
+    private CandidateAnalysisService candidateAnalysisService;
+
+    @Autowired
+    private SkillService skillService;
+
+    @Autowired
+    private RecruitmentProcessService recruitmentProcessService;
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
+    private TestService testService;
+
+    @Autowired
+    private CandidateReceiver candidateReceiver;
+
     @GetMapping("/")
     public String home(HttpSession session, Model model) {
         PlatformSettings settings = PlatformSettings.getInstance();
@@ -66,7 +90,7 @@ public class WebController {
         if (isAdmin(session)) {
             return "redirect:/admin-dashboard";
         }
-        if (isUser(session)) {
+        if (isPlatformUser(session)) {
             return "redirect:/user-dashboard";
         }
         return "login";
@@ -77,7 +101,8 @@ public class WebController {
                               @RequestParam String password,
                               Model model,
                               HttpSession session) {
-        Optional<AppUser> optionalUser = appUserRepository.findByUsername(username);
+        String normalizedUsername = username == null ? "" : username.trim().toLowerCase();
+        Optional<AppUser> optionalUser = appUserRepository.findByUsernameIgnoreCase(normalizedUsername);
         if (optionalUser.isEmpty() || !password.equals(optionalUser.get().getPassword())) {
             model.addAttribute("error", "Email sau parola incorecta.");
             return "login";
@@ -103,21 +128,98 @@ public class WebController {
 
     @GetMapping("/user-dashboard")
     public String userDashboard(HttpSession session, Model model) {
-        if (!isUser(session)) {
-            return "redirect:/login";
+        try {
+            prepareDashboardModel(session, model, true);
+        } catch (RuntimeException ex) {
+            prepareDashboardFallbackModel(session, model);
+        }
+        return "user-dashboard";
+    }
+
+    @GetMapping("/user-dasboard")
+    public String userDasboardAfterRegister(HttpSession session, Model model) {
+        try {
+            prepareDashboardModel(session, model, true);
+        } catch (RuntimeException ex) {
+            prepareDashboardFallbackModel(session, model);
+        }
+        return "user-dashboard";
+    }
+
+    private void prepareDashboardFallbackModel(HttpSession session, Model model) {
+        String username = String.valueOf(session.getAttribute("currentUsername") != null
+                ? session.getAttribute("currentUsername")
+                : "user");
+        String currentUser = String.valueOf(session.getAttribute("currentUser") != null
+                ? session.getAttribute("currentUser")
+                : "Utilizator");
+        String role = String.valueOf(session.getAttribute("currentRole") != null
+                ? session.getAttribute("currentRole")
+                : "CANDIDATE");
+
+        if (session.getAttribute("currentRole") == null) {
+            session.setAttribute("currentRole", role);
+        }
+        if (session.getAttribute("currentUsername") == null) {
+            session.setAttribute("currentUsername", username);
+        }
+        if (session.getAttribute("currentUser") == null) {
+            session.setAttribute("currentUser", currentUser);
         }
 
-        AppUser profile = currentProfile(session).orElseGet(() ->
-                new AppUser(String.valueOf(session.getAttribute("currentUsername")), "", String.valueOf(session.getAttribute("currentUser")), "USER"));
-        List<Candidate> applications = candidateRepository.findByEmail(profile.getUsername());
-        Set<Long> favoriteIds = parseFavoriteIds(profile.getFavoriteJobIds());
-        List<JobListing> favorites = favoriteIds.isEmpty() ? new ArrayList<>() : jobListingRepository.findAllById(favoriteIds);
-        List<JobListing> recommendations = jobListingRepository.findAll().stream()
-                .filter(JobListing::isApproved)
-                .filter(job -> containsIgnoreCase(job.getDomain(), profile.getDomainPreference())
-                        || containsIgnoreCase(job.getLocation(), profile.getLocationPreference()))
-                .limit(5)
-                .collect(Collectors.toList());
+        AppUser profile = new AppUser(username, "", currentUser, role);
+        model.addAttribute("profile", profile);
+        model.addAttribute("applications", new ArrayList<Candidate>());
+        model.addAttribute("favorites", new ArrayList<JobListing>());
+        model.addAttribute("recommendations", new ArrayList<JobListing>());
+        model.addAttribute("notifications", splitLines(profile.getNotifications()));
+        model.addAttribute("messages", splitLines(profile.getMessages()));
+        model.addAttribute("openApplications", 0);
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("skillGroups", new ArrayList<>());
+        model.addAttribute("skills", new ArrayList<>());
+        model.addAttribute("hasSkillGroups", false);
+        model.addAttribute("skillCategories", List.of(
+                "Backend Skills",
+                "Frontend Skills",
+                "Database Skills",
+                "Soft Skills"
+        ));
+        model.addAttribute("currentRole", role);
+        model.addAttribute("isCandidateDashboard", normalizeRole(role).equals("CANDIDATE") || normalizeRole(role).equals("USER"));
+        model.addAttribute("isRecruiterDashboard", normalizeRole(role).equals("RECRUITER"));
+        model.addAttribute("recruiterCandidates", new ArrayList<Candidate>());
+        model.addAttribute("recruiterJobs", new ArrayList<JobListing>());
+        model.addAttribute("tests", new ArrayList<>());
+        model.addAttribute("pendingCandidates", 0);
+        model.addAttribute("approvedJobs", 0);
+        model.addAttribute("pendingJobs", 0);
+        model.addAttribute("profileMessage", "Dashboard incarcat in modul sigur. Autentificarea este activa.");
+    }
+
+    private void prepareDashboardModel(HttpSession session, Model model, boolean allowGuestFallback) {
+        if (session.getAttribute("currentRole") == null) {
+            if (!allowGuestFallback) {
+                return;
+            }
+            session.setAttribute("currentRole", "CANDIDATE");
+            session.setAttribute("currentUser", "Utilizator");
+            session.setAttribute("currentUsername", "user");
+        }
+
+        String username = String.valueOf(session.getAttribute("currentUsername") != null
+                ? session.getAttribute("currentUsername")
+                : "user");
+        String currentUser = String.valueOf(session.getAttribute("currentUser") != null
+                ? session.getAttribute("currentUser")
+                : "Utilizator");
+
+        String role = String.valueOf(session.getAttribute("currentRole"));
+        AppUser profile = currentProfile(session).orElseGet(() -> new AppUser(username, "", currentUser, role));
+        List<Candidate> applications = loadApplicationsSafely(profile.getUsername());
+        Set<Long> favoriteIds = parseFavoriteIdsSafely(profile.getFavoriteJobIds());
+        List<JobListing> favorites = loadFavoritesSafely(favoriteIds);
+        List<JobListing> recommendations = loadRecommendationsSafely(profile);
         long openApplications = applications.stream()
                 .filter(candidate -> !"Accepted".equalsIgnoreCase(candidate.getStatus()))
                 .filter(candidate -> !"Rejected".equalsIgnoreCase(candidate.getStatus()))
@@ -130,29 +232,26 @@ public class WebController {
         model.addAttribute("notifications", splitLines(profile.getNotifications()));
         model.addAttribute("messages", splitLines(profile.getMessages()));
         model.addAttribute("openApplications", openApplications);
-        model.addAttribute("currentUser", session.getAttribute("currentUser"));
-        model.addAttribute("currentRole", session.getAttribute("currentRole"));
-        return "user-dashboard";
-    }
-
-    @GetMapping("/admin-dashboard")
-    public String adminDashboard(HttpSession session, Model model) {
-        if (!isAdmin(session)) {
-            return "redirect:/login";
-        }
-
-        List<JobListing> jobs = jobListingRepository.findAll();
-        List<Candidate> candidates = candidateRepository.findAll();
-        List<AppUser> users = appUserRepository.findAll();
-        model.addAttribute("jobs", jobs);
-        model.addAttribute("candidates", candidates);
-        model.addAttribute("users", users);
-        model.addAttribute("approvedJobs", jobs.stream().filter(JobListing::isApproved).count());
-        model.addAttribute("pendingJobs", jobs.stream().filter(job -> !job.isApproved()).count());
-        model.addAttribute("activeUsers", users.stream().filter(AppUser::isActive).count());
-        model.addAttribute("currentUser", session.getAttribute("currentUser"));
-        model.addAttribute("currentRole", session.getAttribute("currentRole"));
-        return "admin-dashboard";
+        model.addAttribute("currentUser", currentUser);
+        addSkillModel(model, username);
+        enrichDashboardRoleModel(model, session);
+        List<Candidate> recruiterCandidates = loadAllCandidatesSafely();
+        List<JobListing> recruiterJobs = loadAllJobsSafely();
+        model.addAttribute("recruiterCandidates", recruiterCandidates);
+        model.addAttribute("recruiterJobs", recruiterJobs);
+        model.addAttribute("tests", testService.getAllTests());
+        model.addAttribute("pendingCandidates", recruiterCandidates.stream()
+                .filter(candidate -> !"Accepted".equalsIgnoreCase(candidate.getStatus()))
+                .filter(candidate -> !"Rejected".equalsIgnoreCase(candidate.getStatus()))
+                .count());
+        model.addAttribute("approvedJobs", recruiterJobs.stream().filter(JobListing::isApproved).count());
+        model.addAttribute("pendingJobs", recruiterJobs.stream().filter(job -> !job.isApproved()).count());
+        model.addAttribute("registerMessage", session.getAttribute("registerMessage"));
+        model.addAttribute("createdPlatformUserName", session.getAttribute("createdPlatformUserName"));
+        model.addAttribute("createdPlatformUserEmail", session.getAttribute("createdPlatformUserEmail"));
+        session.removeAttribute("registerMessage");
+        session.removeAttribute("createdPlatformUserName");
+        session.removeAttribute("createdPlatformUserEmail");
     }
 
     @GetMapping("/candidates")
@@ -193,26 +292,49 @@ public class WebController {
     }
 
     @PostMapping("/candidates/approve/{id}")
-    public String approveCandidate(@PathVariable Long id, HttpSession session) {
-        if (!isAdmin(session)) {
+    public String approveCandidate(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!isRecruiterOrAdmin(session)) {
             return "redirect:/login";
         }
-        candidateRepository.findById(id).ifPresent(candidate -> {
-            candidate.setState(new AcceptedState());
-            candidateRepository.save(candidate);
-        });
-        return "redirect:/admin-dashboard#applications";
+        String commandResult = candidateRepository.findById(id).map(candidate -> {
+            RecruiterInvoker invoker = new RecruiterInvoker();
+            invoker.setCommand(new ApproveCandidateCommand(candidateReceiver, candidate));
+            return invoker.runCommand();
+        }).orElse(null);
+        if (commandResult == null) {
+            redirectAttributes.addFlashAttribute("commandError", "Candidatul selectat nu a fost gasit.");
+        } else {
+            redirectAttributes.addFlashAttribute("commandMessage", commandResult);
+        }
+        return isRecruiter(session) ? "redirect:/user-dashboard#recruiter-candidates" : "redirect:/admin-dashboard#applications";
     }
 
     @PostMapping("/candidates/reject/{id}")
-    public String rejectCandidate(@PathVariable Long id, HttpSession session) {
+    public String rejectCandidate(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!isRecruiterOrAdmin(session)) {
+            return "redirect:/login";
+        }
+        String commandResult = candidateRepository.findById(id).map(candidate -> {
+            RecruiterInvoker invoker = new RecruiterInvoker();
+            invoker.setCommand(new RejectCandidateCommand(candidateReceiver, candidate));
+            return invoker.runCommand();
+        }).orElse(null);
+        if (commandResult == null) {
+            redirectAttributes.addFlashAttribute("commandError", "Candidatul selectat nu a fost gasit.");
+        } else {
+            redirectAttributes.addFlashAttribute("commandMessage", commandResult);
+        }
+        return isRecruiter(session) ? "redirect:/user-dashboard#recruiter-candidates" : "redirect:/admin-dashboard#applications";
+    }
+
+    @PostMapping("/admin/candidates/delete/{id}")
+    public String deleteCandidate(@PathVariable Long id, HttpSession session) {
         if (!isAdmin(session)) {
             return "redirect:/login";
         }
-        candidateRepository.findById(id).ifPresent(candidate -> {
-            candidate.setState(new RejectedState());
-            candidateRepository.save(candidate);
-        });
+        if (candidateRepository.existsById(id)) {
+            candidateRepository.deleteById(id);
+        }
         return "redirect:/admin-dashboard#applications";
     }
 
@@ -252,13 +374,16 @@ public class WebController {
         model.addAttribute("experience", experience);
         model.addAttribute("minSalary", minSalary);
         model.addAttribute("currentRole", session.getAttribute("currentRole"));
+        model.addAttribute("isCandidateDashboard", isCandidate(session));
+        model.addAttribute("isRecruiterDashboard", isRecruiter(session));
+        model.addAttribute("isAdminDashboard", isAdmin(session));
         return "jobs";
     }
 
     @PostMapping("/jobs/apply/{id}")
     public String applyJob(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
-        if (!isUser(session)) {
-            redirectAttributes.addFlashAttribute("jobMessage", "Trebuie sa te autentifici ca utilizator pentru a aplica.");
+        if (!isCandidate(session)) {
+            redirectAttributes.addFlashAttribute("jobMessage", "Trebuie sa te autentifici ca candidat pentru a aplica.");
             return "redirect:/login";
         }
 
@@ -266,9 +391,19 @@ public class WebController {
         if (optionalJob.isPresent()) {
             JobListing job = optionalJob.get();
             AppUser profile = currentProfile(session).orElse(null);
-            Candidate application = new Candidate(
-                    profile != null ? profile.getFullName() : String.valueOf(session.getAttribute("currentUser")),
-                    String.valueOf(session.getAttribute("currentUsername")));
+            String candidateEmail = String.valueOf(session.getAttribute("currentUsername"));
+            Candidate application = candidateRepository.findByEmail(candidateEmail).stream()
+                    .filter(candidate -> isBlank(candidate.getAppliedJobTitle())
+                            || job.getTitle().equalsIgnoreCase(candidate.getAppliedJobTitle()))
+                    .findFirst()
+                    .orElseGet(() -> candidateRepository.findByEmail(candidateEmail).stream()
+                            .findFirst()
+                            .orElseGet(() -> new Candidate(
+                                    profile != null ? profile.getFullName() : String.valueOf(session.getAttribute("currentUser")),
+                                    candidateEmail)));
+
+            application.setName(profile != null ? profile.getFullName() : String.valueOf(session.getAttribute("currentUser")));
+            application.setEmail(candidateEmail);
             application.setSkill(profile != null ? profile.getDomainPreference() : "N/A");
             application.setAppliedJobTitle(job.getTitle());
             application.setExpectedSalary(job.getSalary());
@@ -282,12 +417,10 @@ public class WebController {
                 appUserRepository.save(profile);
             }
 
-            JobApplicationSubject subject = new JobApplicationSubject();
-            subject.attach(new RecruiterObserver("HR Manager"));
-            subject.attach(new CandidateObserver("System"));
-            subject.setApplicationDetails(String.valueOf(session.getAttribute("currentUser")), job.getTitle());
-            subject.updateStatus("Applied");
-            redirectAttributes.addFlashAttribute("jobMessage", "Ai aplicat cu succes pentru jobul '" + job.getTitle() + "'.");
+            notificationService.notifyRecruitersAboutApplication(application, job);
+            redirectAttributes.addFlashAttribute("jobMessage",
+                    "Cererea a fost trimisa catre recrutor pentru jobul '" + job.getTitle()
+                            + "'. Asteptati raspunsul recruiterului.");
         } else {
             redirectAttributes.addFlashAttribute("jobMessage", "Jobul nu a fost gasit.");
         }
@@ -296,7 +429,7 @@ public class WebController {
 
     @PostMapping("/jobs/favorite/{id}")
     public String toggleFavorite(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
-        if (!isUser(session)) {
+        if (!isCandidate(session)) {
             redirectAttributes.addFlashAttribute("jobMessage", "Trebuie sa te autentifici pentru a salva joburi favorite.");
             return "redirect:/login";
         }
@@ -321,7 +454,7 @@ public class WebController {
                                 @RequestParam(required = false) String cv,
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) {
-        if (!isUser(session)) {
+        if (!isPlatformUser(session)) {
             return "redirect:/login";
         }
         currentProfile(session).ifPresent(user -> {
@@ -337,9 +470,36 @@ public class WebController {
         return "redirect:/user-dashboard#profile";
     }
 
+    @PostMapping("/skills/add")
+    public String addSkill(@RequestParam String category,
+                           @RequestParam String name,
+                           HttpSession session,
+                           RedirectAttributes redirectAttributes) {
+        if (!isCandidate(session)) {
+            return "redirect:/login";
+        }
+        String username = String.valueOf(session.getAttribute("currentUsername"));
+        skillService.addSkill(username, category, name);
+        redirectAttributes.addFlashAttribute("profileMessage", "Skill-ul a fost adaugat in profil.");
+        return "redirect:/user-dashboard#my-skills";
+    }
+
+    @PostMapping("/skills/delete/{id}")
+    public String deleteSkill(@PathVariable Long id,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) {
+        if (!isCandidate(session)) {
+            return "redirect:/login";
+        }
+        String username = String.valueOf(session.getAttribute("currentUsername"));
+        skillService.deleteSkill(id, username);
+        redirectAttributes.addFlashAttribute("profileMessage", "Skill-ul a fost sters.");
+        return "redirect:/user-dashboard#my-skills";
+    }
+
     @PostMapping("/messages/send")
     public String sendMessage(@RequestParam String message, HttpSession session) {
-        if (!isUser(session)) {
+        if (!isPlatformUser(session)) {
             return "redirect:/login";
         }
         currentProfile(session).ifPresent(user -> {
@@ -360,10 +520,11 @@ public class WebController {
                           @RequestParam double salary,
                           @RequestParam(defaultValue = "false") boolean approved,
                           HttpSession session) {
-        if (!isAdmin(session)) {
+        if (!isRecruiterOrAdmin(session)) {
             return "redirect:/login";
         }
-        JobListing job = id == null ? new JobListing() : jobListingRepository.findById(id).orElse(new JobListing());
+        boolean isNewJob = id == null;
+        JobListing job = isNewJob ? new JobListing() : jobListingRepository.findById(id).orElse(new JobListing());
         job.setTitle(title);
         job.setDescription(description);
         job.setDomain(domain);
@@ -372,33 +533,49 @@ public class WebController {
         job.setSalary(salary);
         job.setApproved(approved);
         jobListingRepository.save(job);
-        return "redirect:/admin-dashboard#jobs-admin";
+        if (isNewJob && approved) {
+            notificationService.notifyCandidatesAboutNewJob(job);
+        }
+        return isRecruiter(session) ? "redirect:/user-dashboard#recruiter-jobs" : "redirect:/admin-dashboard#jobs-admin";
     }
 
     @PostMapping("/admin/jobs/approval/{id}")
     public String updateJobApproval(@PathVariable Long id, @RequestParam boolean approved, HttpSession session) {
-        if (!isAdmin(session)) {
+        if (!isRecruiterOrAdmin(session)) {
             return "redirect:/login";
         }
         jobListingRepository.findById(id).ifPresent(job -> {
             job.setApproved(approved);
             jobListingRepository.save(job);
         });
-        return "redirect:/admin-dashboard#jobs-admin";
+        return isRecruiter(session) ? "redirect:/user-dashboard#recruiter-jobs" : "redirect:/admin-dashboard#jobs-admin";
+    }
+
+    @GetMapping("/admin/jobs/clone/{id}")
+    @ResponseBody
+    public ResponseEntity<JobListing> cloneJob(@PathVariable Long id, HttpSession session) {
+        if (!isRecruiterOrAdmin(session)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return jobService.cloneJob(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/admin/jobs/delete/{id}")
     public String deleteJob(@PathVariable Long id, HttpSession session) {
-        if (!isAdmin(session)) {
+        if (!isRecruiterOrAdmin(session)) {
             return "redirect:/login";
         }
-        jobListingRepository.deleteById(id);
-        return "redirect:/admin-dashboard#jobs-admin";
+        if (jobListingRepository.existsById(id)) {
+            jobListingRepository.deleteById(id);
+        }
+        return isRecruiter(session) ? "redirect:/user-dashboard#recruiter-jobs" : "redirect:/admin-dashboard#jobs-admin";
     }
 
     @PostMapping("/admin/users/toggle/{id}")
     public String toggleUser(@PathVariable Long id, HttpSession session) {
-        if (!isAdmin(session)) {
+        if (!isRecruiterOrAdmin(session)) {
             return "redirect:/login";
         }
         appUserRepository.findById(id).ifPresent(user -> {
@@ -471,29 +648,56 @@ public class WebController {
         return "statistics";
     }
 
-    @PostMapping("/candidates/evaluate/{id}")
-    public String evaluateCandidate(@PathVariable Long id, HttpSession session) {
-        if (!isAdmin(session)) {
+    @GetMapping("/my-skills")
+    public String mySkills(HttpSession session) {
+        if (!isCandidate(session)) {
             return "redirect:/login";
         }
-        candidateRepository.findById(id).ifPresent(candidate -> {
-            CandidateEvaluator evaluator = new CandidateEvaluator();
-            CompositeEvaluationStrategy compositeStrategy = new CompositeEvaluationStrategy();
-            compositeStrategy.addStrategy(new ScoreStrategy());
-            compositeStrategy.addStrategy(new ExperienceStrategy());
-            compositeStrategy.addStrategy(new SkillStrategy());
-            evaluator.setStrategy(compositeStrategy);
-            int skillCount = candidate.getSkill() == null ? 0 : candidate.getSkill().split(",").length;
-            String evaluation = evaluator.evaluateCandidate(candidate.getName(), 85, 3, skillCount);
-            candidate.setRecruiterMessage(evaluation);
-            candidateRepository.save(candidate);
-        });
-        return "redirect:/admin-dashboard#applications";
+        return "redirect:/user-dashboard#my-skills";
+    }
+
+    @PostMapping("/candidates/evaluate/{id}")
+    public String evaluateCandidate(@PathVariable Long id,
+                                    @RequestParam(defaultValue = "85") int testScore,
+                                    @RequestParam(required = false) String evaluationMethod,
+                                    @RequestParam(defaultValue = "0") int experienceYears,
+                                    @RequestParam(required = false) String recruiterNotes,
+                                    HttpSession session,
+                                    RedirectAttributes redirectAttributes) {
+        if (!isRecruiterOrAdmin(session)) {
+            return "redirect:/login";
+        }
+        try {
+            String message = evaluationMethod == null || "testScore".equalsIgnoreCase(evaluationMethod)
+                    ? candidateAnalysisService.analyzeCandidate(id, testScore, recruiterNotes)
+                    : candidateAnalysisService.analyzeCandidate(id, testScore, experienceYears, evaluationMethod, recruiterNotes);
+            redirectAttributes.addFlashAttribute("adapterEvaluationMessage", message);
+        } catch (IllegalArgumentException ex) {
+            redirectAttributes.addFlashAttribute("adapterEvaluationMessage", "Candidate could not be evaluated.");
+        }
+        return isRecruiter(session) ? "redirect:/user-dashboard#recruiter-candidates" : "redirect:/admin-dashboard#applications";
+    }
+
+    @PostMapping("/recruitment/process/{id}")
+    public String processRecruitment(@PathVariable Long id,
+                                     @RequestParam(defaultValue = "85") int testScore,
+                                     HttpSession session,
+                                     RedirectAttributes redirectAttributes) {
+        if (!isRecruiterOrAdmin(session)) {
+            return "redirect:/login";
+        }
+        try {
+            List<String> result = recruitmentProcessService.processCandidate(id, testScore);
+            redirectAttributes.addFlashAttribute("recruitmentProcessMessage", String.join(" | ", result));
+        } catch (IllegalArgumentException ex) {
+            redirectAttributes.addFlashAttribute("recruitmentProcessMessage", "Recruitment process could not be completed.");
+        }
+        return isRecruiter(session) ? "redirect:/user-dashboard#recruiter-candidates" : "redirect:/admin-dashboard#applications";
     }
 
     @GetMapping("/candidates/cv/{id}")
     public String viewCandidateCv(@PathVariable Long id, HttpSession session, Model model) {
-        if (!isAdmin(session)) {
+        if (!isRecruiterOrAdmin(session)) {
             return "redirect:/login";
         }
         candidateRepository.findById(id).ifPresent(candidate -> {
@@ -506,11 +710,81 @@ public class WebController {
     }
 
     private boolean isAdmin(HttpSession session) {
-        return "ADMIN".equalsIgnoreCase(String.valueOf(session.getAttribute("currentRole")));
+        return hasRole(session, "ADMIN");
     }
 
     private boolean isUser(HttpSession session) {
-        return "USER".equalsIgnoreCase(String.valueOf(session.getAttribute("currentRole")));
+        return hasRole(session, "USER");
+    }
+
+    private boolean isCandidate(HttpSession session) {
+        return hasRole(session, "CANDIDATE") || hasRole(session, "USER");
+    }
+
+    private boolean isRecruiter(HttpSession session) {
+        return hasRole(session, "RECRUITER");
+    }
+
+    private boolean isPlatformUser(HttpSession session) {
+        return isCandidate(session) || isRecruiter(session) || isUser(session);
+    }
+
+    private boolean isRecruiterOrAdmin(HttpSession session) {
+        return isAdmin(session) || isRecruiter(session);
+    }
+
+    private boolean hasRole(HttpSession session, String expectedRole) {
+        String expected = normalizeRole(expectedRole);
+        String sessionRole = normalizeRole(String.valueOf(session.getAttribute("currentRole")));
+        if (expected.equals(sessionRole)) {
+            return true;
+        }
+
+        Object username = session.getAttribute("currentUsername");
+        if (username == null) {
+            return false;
+        }
+
+        return appUserRepository.findByUsername(String.valueOf(username))
+                .map(AppUser::getRole)
+                .map(this::normalizeRole)
+                .filter(expected::equals)
+                .isPresent();
+    }
+
+    private String normalizeRole(String role) {
+        if (role == null || "null".equalsIgnoreCase(role)) {
+            return "";
+        }
+        String normalized = role.trim().toUpperCase();
+        if ("RECRUITER".equals(normalized) || "RECRUTOR".equals(normalized) || "RECRUITER_ROLE".equals(normalized)) {
+            return "RECRUITER";
+        }
+        if ("CANDIDATE".equals(normalized) || "CANDIDAT".equals(normalized) || "USER".equals(normalized)) {
+            return normalized;
+        }
+        return normalized;
+    }
+
+    private void enrichDashboardRoleModel(Model model, HttpSession session) {
+        String role = String.valueOf(session.getAttribute("currentRole"));
+        model.addAttribute("currentRole", role);
+        model.addAttribute("isCandidateDashboard", isCandidate(session));
+        model.addAttribute("isRecruiterDashboard", isRecruiter(session));
+    }
+
+    private void addSkillModel(Model model, String username) {
+        List<?> skillGroups = skillService.getSkillGroups(username);
+        List<?> skills = skillService.getSkills(username);
+        model.addAttribute("skillGroups", skillGroups);
+        model.addAttribute("skills", skills);
+        model.addAttribute("hasSkillGroups", !skillGroups.isEmpty());
+        model.addAttribute("skillCategories", List.of(
+                "Backend Skills",
+                "Frontend Skills",
+                "Database Skills",
+                "Soft Skills"
+        ));
     }
 
     private boolean isBlank(String value) {
@@ -556,6 +830,59 @@ public class WebController {
                 .filter(item -> !item.isEmpty())
                 .map(Long::valueOf)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private Set<Long> parseFavoriteIdsSafely(String value) {
+        try {
+            return parseFavoriteIds(value);
+        } catch (NumberFormatException ex) {
+            return new LinkedHashSet<>();
+        }
+    }
+
+    private List<Candidate> loadApplicationsSafely(String username) {
+        try {
+            return candidateRepository.findByEmail(username);
+        } catch (RuntimeException ex) {
+            return new ArrayList<>();
+        }
+    }
+
+    private List<JobListing> loadFavoritesSafely(Set<Long> favoriteIds) {
+        try {
+            return favoriteIds.isEmpty() ? new ArrayList<>() : jobListingRepository.findAllById(favoriteIds);
+        } catch (RuntimeException ex) {
+            return new ArrayList<>();
+        }
+    }
+
+    private List<JobListing> loadRecommendationsSafely(AppUser profile) {
+        try {
+            return jobListingRepository.findAll().stream()
+                    .filter(JobListing::isApproved)
+                    .filter(job -> containsIgnoreCase(job.getDomain(), profile.getDomainPreference())
+                            || containsIgnoreCase(job.getLocation(), profile.getLocationPreference()))
+                    .limit(5)
+                    .collect(Collectors.toList());
+        } catch (RuntimeException ex) {
+            return new ArrayList<>();
+        }
+    }
+
+    private List<Candidate> loadAllCandidatesSafely() {
+        try {
+            return candidateRepository.findAll();
+        } catch (RuntimeException ex) {
+            return new ArrayList<>();
+        }
+    }
+
+    private List<JobListing> loadAllJobsSafely() {
+        try {
+            return jobListingRepository.findAll();
+        } catch (RuntimeException ex) {
+            return new ArrayList<>();
+        }
     }
 
     private String joinIds(Set<Long> ids) {
