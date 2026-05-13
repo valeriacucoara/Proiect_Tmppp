@@ -7,4 +7,5 @@ public interface JobListingService {
     List<JobListing> getAllJobListings();
     JobListing saveJobListing(JobListing jobListing);
     void deleteJobListing(Long id);
+  
 }
