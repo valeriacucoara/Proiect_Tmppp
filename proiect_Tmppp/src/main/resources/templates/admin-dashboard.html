@@ -21,11 +21,17 @@
         .btn-main { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 750; border-radius: 8px; }
         .btn-danger-soft { background: #fee2e2; color: #991b1b; border: 0; font-weight: 750; border-radius: 8px; }
         .btn-ok-soft { background: #dcfce7; color: #166534; border: 0; font-weight: 750; border-radius: 8px; }
+        .btn-clone-soft { background: #e0f2fe; color: #075985; border: 0; font-weight: 750; border-radius: 8px; }
+        .clone-note { display: none; background: #eff6ff; color: #1e3a8a; border-radius: 8px; padding: .75rem .9rem; font-weight: 650; }
+        .clone-mode .clone-note { display: block; }
+        .test-builder-grid { display: grid; grid-template-columns: minmax(280px, 430px) 1fr; gap: 1rem; align-items: start; }
+        .test-preview { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; }
+        .test-questions { white-space: pre-wrap; max-width: 520px; }
         .chart { height: 180px; display: flex; gap: 1rem; align-items: end; border-bottom: 1px solid #dbe4ef; padding: 0 1rem; }
         .chart span { flex: 1; background: #2563eb; border-radius: 6px 6px 0 0; min-height: 24px; position: relative; }
         .chart span::after { content: attr(data-label); position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%); color: #64748b; font-size: .8rem; white-space: nowrap; }
         .form-control, .form-select { min-width: 120px; }
-        @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } .sidebar { height: auto; position: relative; } .main { padding: 1rem; } }
+        @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } .sidebar { height: auto; position: relative; } .main { padding: 1rem; } .test-builder-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -36,6 +42,7 @@
         <a class="side-link active" th:href="@{/admin-dashboard}">Dashboard</a>
         <a class="side-link" th:href="@{/jobs}">Joburi publice</a>
         <a class="side-link" href="#jobs-admin">Management joburi</a>
+        <a class="side-link" href="#technical-tests">Teste tehnice</a>
         <a class="side-link" href="#applications">Aplicatii</a>
         <a class="side-link" href="#users">Utilizatori</a>
         <a class="side-link" th:href="@{/logout}">Logout</a>
@@ -49,6 +56,9 @@
             </div>
             <span class="badge text-bg-dark p-3" th:text="${currentUser}">Admin</span>
         </div>
+
+        <div th:if="${commandMessage}" class="alert alert-success" th:text="${commandMessage}"></div>
+        <div th:if="${commandError}" class="alert alert-danger" th:text="${commandError}"></div>
 
         <div class="row g-3 mb-3">
             <div class="col-md-3"><div class="cardx stat"><strong th:text="${jobs.size()}">0</strong><span>joburi totale</span></div></div>
@@ -97,39 +107,165 @@
         <section class="cardx mb-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="h5 fw-bold mb-0">Management date joburi</h2>
-                <span class="text-secondary">editare, aprobare, respingere, eliminare</span>
+                <span class="text-secondary">editare, clonare, aprobare, respingere, eliminare</span>
             </div>
             <div class="table-wrap">
                 <table class="table align-middle">
                     <thead><tr><th>Titlu</th><th>Domeniu</th><th>Locatie</th><th>Nivel</th><th>Salariu</th><th>Status</th><th>Actiuni</th></tr></thead>
                     <tbody>
                     <tr th:each="job : ${jobs}">
-                        <form th:action="@{/admin/jobs/save}" method="post">
-                            <input type="hidden" name="id" th:value="${job.id}">
-                            <td><input class="form-control" name="title" th:value="${job.title}"></td>
-                            <td><input class="form-control" name="domain" th:value="${job.domain}"></td>
-                            <td><input class="form-control" name="location" th:value="${job.location}"></td>
-                            <td><input class="form-control" name="experienceLevel" th:value="${job.experienceLevel}"></td>
-                            <td><input class="form-control" type="number" name="salary" th:value="${job.salary}"></td>
-                            <td>
-                                <input type="hidden" name="description" th:value="${job.description}">
-                                <input type="hidden" name="approved" th:value="${job.approved}">
-                                <span class="badge" th:classappend="${job.approved} ? ' text-bg-success' : ' text-bg-warning'" th:text="${job.approved ? 'Aprobat' : 'In asteptare'}">Status</span>
-                            </td>
-                            <td class="d-flex gap-2">
-                                <button class="btn btn-sm btn-main" type="submit">Update</button>
-                        </form>
-                                <form th:action="@{'/admin/jobs/approval/' + ${job.id}}" method="post">
-                                    <input type="hidden" name="approved" th:value="${!job.approved}">
-                                    <button class="btn btn-sm btn-ok-soft" type="submit" th:text="${job.approved ? 'Respinge' : 'Aproba'}">Aproba</button>
-                                </form>
-                                <form th:action="@{'/admin/jobs/delete/' + ${job.id}}" method="post">
-                                    <button class="btn btn-sm btn-danger-soft" type="submit">Sterge</button>
-                                </form>
-                            </td>
+                        <td th:text="${job.title}">Titlu</td>
+                        <td th:text="${job.domain}">Domeniu</td>
+                        <td th:text="${job.location}">Locatie</td>
+                        <td th:text="${job.experienceLevel}">Nivel</td>
+                        <td th:text="${job.salary}">Salariu</td>
+                        <td>
+                            <span class="badge" th:classappend="${job.approved} ? ' text-bg-success' : ' text-bg-warning'" th:text="${job.approved ? 'Aprobat' : 'In asteptare'}">Status</span>
+                        </td>
+                        <td class="d-flex gap-2 align-items-center">
+                            <button class="btn btn-sm btn-main" type="button"
+                                    th:attr="data-id=${job.id},data-title=${job.title},data-description=${job.description},data-domain=${job.domain},data-location=${job.location},data-experience=${job.experienceLevel},data-salary=${job.salary},data-approved=${job.approved}"
+                                    onclick="openJobEditModal(this)">
+                                Update
+                            </button>
+                            <button class="btn btn-sm btn-clone-soft" type="button"
+                                    th:attr="data-clone-url=@{'/admin/jobs/clone/' + ${job.id}}"
+                                    onclick="openJobCloneModal(this)">
+                                Cloneaza job
+                            </button>
+                            <form th:action="@{'/admin/jobs/approval/' + ${job.id}}" method="post"
+                                  th:onsubmit="${job.approved} ? 'return confirm(\'Sunteti sigur ca doriti sa respingeti acest job?\');' : 'return confirm(\'Sunteti sigur ca doriti sa aprobati acest job?\');'">
+                                <input type="hidden" name="approved" th:value="${!job.approved}">
+                                <button class="btn btn-sm btn-ok-soft" type="submit" th:text="${job.approved ? 'Respinge' : 'Aproba'}">Aproba</button>
+                            </form>
+                            <form th:action="@{'/admin/jobs/delete/' + ${job.id}}" method="post" onsubmit="return confirm('Confirmati stergerea jobului? Aceasta actiune este definitiva.');">
+                                <button class="btn btn-sm btn-danger-soft" type="submit">Sterge</button>
+                            </form>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
+            </div>
+        </section>
+
+        <!-- Job edit modal -->
+        <div class="modal fade" id="jobEditModal" tabindex="-1" aria-labelledby="jobEditModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <form th:action="@{/admin/jobs/save}" method="post" class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="jobEditModalLabel">Editeaza Job</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="jobEditId" />
+                        <input type="hidden" name="approved" id="jobEditApprovedHidden" disabled />
+                        <div class="clone-note mb-3" id="jobCloneNote">Acesta este un job clonat. La salvare se creeaza un job nou, iar jobul original ramane nemodificat.</div>
+                        <div class="mb-3">
+                            <label class="form-label">Titlu job</label>
+                            <input class="form-control" type="text" name="title" id="jobEditTitle" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descriere</label>
+                            <textarea class="form-control" name="description" id="jobEditDescription" rows="4" required></textarea>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Domeniu</label>
+                                <input class="form-control" type="text" name="domain" id="jobEditDomain" required />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Locatie</label>
+                                <input class="form-control" type="text" name="location" id="jobEditLocation" required />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Nivel</label>
+                                <input class="form-control" type="text" name="experienceLevel" id="jobEditExperience" required />
+                            </div>
+                        </div>
+                        <div class="row g-3 mt-3 align-items-end">
+                            <div class="col-md-6">
+                                <label class="form-label">Salariu</label>
+                                <input class="form-control" type="number" step="100" name="salary" id="jobEditSalary" required />
+                            </div>
+                            <div class="col-md-6 form-check pt-4">
+                                <input class="form-check-input" type="checkbox" name="approved" id="jobEditApproved" value="true" />
+                                <label class="form-check-label" for="jobEditApproved">Job aprobat</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                        <button type="submit" class="btn btn-main" id="jobEditSubmit">Salveaza modificari</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <section class="cardx mb-3" id="technical-tests">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Teste Tehnice</h2>
+            </div>
+            <div class="test-builder-grid">
+                <form th:action="@{/admin/tests/create}" method="post" class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">Titlu test</label>
+                        <input class="form-control" name="title" placeholder="Test Java Spring Boot" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Dificultate</label>
+                        <select class="form-select" name="difficulty" required>
+                            <option value="Junior">Junior</option>
+                            <option value="Middle">Middle</option>
+                            <option value="Senior">Senior</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Durata minute</label>
+                        <input class="form-control" type="number" name="duration" min="10" step="5" value="60" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Domeniu tehnic</label>
+                        <input class="form-control" name="domain" placeholder="Backend Java" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Intrebari</label>
+                        <textarea class="form-control" name="questions" rows="7" placeholder="1. Explica Dependency Injection.&#10;2. Creeaza un endpoint REST pentru candidati.&#10;3. Scrie o interogare JPA pentru joburi aprobate." required></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-main w-100" type="submit">Genereaza test</button>
+                    </div>
+                </form>
+
+                <div>
+                    <div class="test-preview mb-3" th:if="${createdTest != null}">
+                        <p class="text-uppercase text-secondary fw-bold mb-1">Test creat</p>
+                        <h3 class="h5 fw-bold" th:text="${createdTest.title}">Test nou</h3>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <span class="badge text-bg-dark" th:text="${createdTest.domain}">Domeniu</span>
+                            <span class="badge text-bg-warning" th:text="${createdTest.difficulty}">Nivel</span>
+                            <span class="badge text-bg-info" th:text="${createdTest.duration + ' min'}">60 min</span>
+                        </div>
+                        <pre class="test-questions mb-0" th:text="${createdTest.questions}">Intrebari</pre>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="table align-middle">
+                            <thead><tr><th>Titlu</th><th>Domeniu</th><th>Dificultate</th><th>Durata</th><th>Intrebari</th></tr></thead>
+                            <tbody>
+                            <tr th:each="test : ${tests}">
+                                <td th:text="${test.title}">Titlu</td>
+                                <td th:text="${test.domain}">Domeniu</td>
+                                <td><span class="badge text-bg-light" th:text="${test.difficulty}">Junior</span></td>
+                                <td th:text="${test.duration + ' min'}">60 min</td>
+                                <td><pre class="test-questions mb-0" th:text="${test.questions}">Intrebari</pre></td>
+                            </tr>
+                            <tr th:if="${tests.isEmpty()}">
+                                <td colspan="5" class="text-secondary">Nu exista teste tehnice generate.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -148,7 +284,8 @@
                         <td class="d-flex gap-2">
                             <form th:action="@{'/candidates/evaluate/' + ${candidate.id}}" method="post"><button class="btn btn-sm btn-main" type="submit">Evalueaza</button></form>
                             <form th:action="@{'/candidates/approve/' + ${candidate.id}}" method="post"><button class="btn btn-sm btn-ok-soft" type="submit">Accepta</button></form>
-                            <form th:action="@{'/candidates/reject/' + ${candidate.id}}" method="post"><button class="btn btn-sm btn-danger-soft" type="submit">Respinge</button></form>
+                            <form th:action="@{'/candidates/reject/' + ${candidate.id}}" method="post" onsubmit="return confirm('Sunteti sigur ca doriti sa respingeti acest candidat?');"><button class="btn btn-sm btn-danger-soft" type="submit">Respinge</button></form>
+                            <form th:action="@{'/admin/candidates/delete/' + ${candidate.id}}" method="post" onsubmit="return confirm('Confirmati stergerea candidatului? Aceasta actiune este definitiva.');"><button class="btn btn-sm btn-danger-soft" type="submit">Sterge</button></form>
                             <a class="btn btn-sm btn-outline-dark" th:href="@{'/candidates/cv/' + ${candidate.id}}">CV</a>
                         </td>
                     </tr>
@@ -182,5 +319,78 @@
     </main>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const jobModalFields = {
+        id: document.getElementById('jobEditId'),
+        title: document.getElementById('jobEditTitle'),
+        description: document.getElementById('jobEditDescription'),
+        domain: document.getElementById('jobEditDomain'),
+        location: document.getElementById('jobEditLocation'),
+        experience: document.getElementById('jobEditExperience'),
+        salary: document.getElementById('jobEditSalary'),
+        approved: document.getElementById('jobEditApproved'),
+        approvedHidden: document.getElementById('jobEditApprovedHidden'),
+        titleLabel: document.getElementById('jobEditModalLabel'),
+        submit: document.getElementById('jobEditSubmit'),
+        modal: document.getElementById('jobEditModal')
+    };
+
+    function fillJobModal(job) {
+        jobModalFields.id.value = job.id || '';
+        jobModalFields.title.value = job.title || '';
+        jobModalFields.description.value = job.description || '';
+        jobModalFields.domain.value = job.domain || '';
+        jobModalFields.location.value = job.location || '';
+        jobModalFields.experience.value = job.experienceLevel || job.experience || '';
+        jobModalFields.salary.value = job.salary || '';
+        jobModalFields.approved.checked = job.approved === true || job.approved === 'true';
+        jobModalFields.approvedHidden.value = jobModalFields.approved.checked ? 'true' : 'false';
+    }
+
+    function setJobModalMode(mode) {
+        const cloneMode = mode === 'clone';
+        jobModalFields.modal.classList.toggle('clone-mode', cloneMode);
+        jobModalFields.titleLabel.textContent = cloneMode ? 'Cloneaza Job' : 'Editeaza Job';
+        jobModalFields.submit.textContent = cloneMode ? 'Salveaza job clonat' : 'Salveaza modificari';
+        jobModalFields.id.disabled = cloneMode;
+        jobModalFields.description.readOnly = cloneMode;
+        jobModalFields.domain.readOnly = cloneMode;
+        jobModalFields.approved.disabled = cloneMode;
+        jobModalFields.approvedHidden.disabled = !cloneMode;
+    }
+
+    function showJobModal() {
+        bootstrap.Modal.getOrCreateInstance(jobModalFields.modal).show();
+    }
+
+    function openJobEditModal(button) {
+        const dataset = button.dataset;
+        setJobModalMode('edit');
+        fillJobModal({
+            id: dataset.id,
+            title: dataset.title,
+            description: dataset.description,
+            domain: dataset.domain,
+            location: dataset.location,
+            experience: dataset.experience,
+            salary: dataset.salary,
+            approved: dataset.approved
+        });
+        showJobModal();
+    }
+
+    async function openJobCloneModal(button) {
+        setJobModalMode('clone');
+        const response = await fetch(button.dataset.cloneUrl);
+        if (!response.ok) {
+            alert('Jobul nu a putut fi clonat.');
+            return;
+        }
+        const clonedJob = await response.json();
+        clonedJob.id = '';
+        fillJobModal(clonedJob);
+        showJobModal();
+    }
+</script>
 </body>
 </html>

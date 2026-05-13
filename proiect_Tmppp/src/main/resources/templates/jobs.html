@@ -29,8 +29,11 @@
         <a class="brand" th:href="@{/}">RecruitPro</a>
         <a class="side-link" th:href="@{/}">Acasa</a>
         <a class="side-link active" th:href="@{/jobs}">Joburi</a>
-        <a class="side-link" th:href="@{/user-dashboard}" th:if="${currentRole == 'USER'}">Dashboard user</a>
-        <a class="side-link" th:href="@{/admin-dashboard}" th:if="${currentRole == 'ADMIN'}">Dashboard admin</a>
+        <a class="side-link" th:href="@{/user-dashboard}" th:if="${isCandidateDashboard}">Profilul meu</a>
+        <a class="side-link" th:href="@{/user-dashboard}" th:if="${isCandidateDashboard}">Aplicatiile mele</a>
+        <a class="side-link" th:href="@{/user-dashboard#my-skills}" th:if="${isCandidateDashboard}">My Skills</a>
+        <a class="side-link" th:href="@{/user-dashboard}" th:if="${isRecruiterDashboard}">Recruiter Dashboard</a>
+        <a class="side-link" th:href="@{/admin-dashboard}" th:if="${isAdminDashboard}">Dashboard admin</a>
         <a class="side-link" th:href="@{/login}" th:if="${currentRole == null}">Autentificare</a>
         <a class="side-link" th:href="@{/logout}" th:if="${currentRole != null}">Logout</a>
     </aside>
@@ -98,7 +101,7 @@
                     <div class="salary"><span th:text="${#numbers.formatDecimal(job.salary, 0, 0)}">0</span> MDL</div>
                     <div class="d-flex gap-2">
                         <form th:action="@{'/jobs/apply/' + ${job.id}}" method="post" class="flex-fill">
-                            <button type="submit" class="btn btn-main w-100">Aplica</button>
+                            <button type="submit" class="btn btn-main w-100">Apply Now</button>
                         </form>
                         <form th:action="@{'/jobs/favorite/' + ${job.id}}" method="post">
                             <button type="submit" class="btn btn-lightline" th:text="${favoriteIds != null and favoriteIds.contains(job.id) ? 'Salvat' : 'Salveaza'}">Salveaza</button>

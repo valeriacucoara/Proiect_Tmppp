@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard candidat</title>
+    <title>Dashboard utilizator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { margin: 0; font-family: Inter, "Segoe UI", sans-serif; background: #f4f7fb; color: #172033; }
@@ -21,11 +21,26 @@
         .tag { display: inline-flex; padding: .3rem .55rem; border-radius: 999px; background: #eef6ff; color: #174b66; font-size: .8rem; font-weight: 750; margin: .1rem; }
         .timeline { border-left: 3px solid #dbeafe; padding-left: 1rem; }
         .timeline-item { margin-bottom: .85rem; }
+        .skill-tree { display: grid; gap: .8rem; }
+        .skill-group { border: 1px solid #e4ebf3; border-radius: 8px; padding: .85rem; background: #fbfdff; }
+        .skill-leaves { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .65rem; }
+        .skill-pill { display: inline-flex; align-items: center; gap: .35rem; border: 1px solid #cfe0f2; background: #fff; color: #174b66; padding: .35rem .55rem; border-radius: 999px; font-weight: 700; font-size: .84rem; }
+        .skill-remove { border: 0; background: transparent; color: #dc2626; font-weight: 800; line-height: 1; padding: 0 .1rem; }
         .btn-main { background: #0f766e; border-color: #0f766e; color: #fff; font-weight: 750; border-radius: 8px; }
+        .btn-danger-soft { background: #fee2e2; color: #991b1b; border: 0; font-weight: 750; border-radius: 8px; }
+        .btn-ok-soft { background: #dcfce7; color: #166534; border: 0; font-weight: 750; border-radius: 8px; }
+        .btn-clone-soft { background: #e0f2fe; color: #075985; border: 0; font-weight: 750; border-radius: 8px; }
+        .clone-note { display: none; background: #eff6ff; color: #1e3a8a; border-radius: 8px; padding: .75rem .9rem; font-weight: 650; }
+        .clone-mode .clone-note { display: block; }
+        .table-wrap { overflow-x: auto; }
+        table { min-width: 900px; }
+        .test-builder-grid { display: grid; grid-template-columns: minmax(280px, 430px) 1fr; gap: 1rem; align-items: start; }
+        .test-preview { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; }
+        .test-questions { white-space: pre-wrap; max-width: 520px; }
         .list-row { border-bottom: 1px solid #edf2f7; padding: .75rem 0; }
         .list-row:last-child { border-bottom: 0; }
         textarea { min-height: 130px; }
-        @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .sidebar { height: auto; position: relative; } .main { padding: 1rem; } }
+        @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .sidebar { height: auto; position: relative; } .main { padding: 1rem; } .test-builder-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -34,31 +49,410 @@
         <a class="brand" th:href="@{/}">RecruitPro</a>
         <a class="side-link" th:href="@{/}">Acasa</a>
         <a class="side-link active" th:href="@{/user-dashboard}">Dashboard</a>
-        <a class="side-link" th:href="@{/jobs}">Joburi</a>
-        <a class="side-link" href="#profile">Profil si CV</a>
-        <a class="side-link" href="#messages">Mesagerie</a>
+        <a class="side-link" th:href="@{/jobs}" th:if="${isCandidateDashboard}">Joburi</a>
+        <a class="side-link" href="#profile" th:if="${isCandidateDashboard}">Profil si CV</a>
+        <a class="side-link" href="#my-skills" th:if="${isCandidateDashboard}">My Skills</a>
+        <a class="side-link" href="#messages" th:if="${isCandidateDashboard}">Mesagerie</a>
+        <a class="side-link" href="#recruiter-candidates" th:if="${isRecruiterDashboard}">Candidati</a>
+        <a class="side-link" href="#recruiter-jobs" th:if="${isRecruiterDashboard}">Joburi</a>
+        <a class="side-link" href="#technical-tests" th:if="${isRecruiterDashboard}">Teste Tehnice</a>
         <a class="side-link" th:href="@{/logout}">Logout</a>
     </aside>
 
     <main class="main">
         <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
             <div>
-                <p class="text-uppercase text-secondary fw-bold mb-1">Dashboard candidat</p>
+                <p class="text-uppercase text-secondary fw-bold mb-1"
+                   th:text="${isRecruiterDashboard} ? 'Dashboard recruiter' : 'Dashboard candidat'">Dashboard</p>
                 <h1 class="fw-bold mb-0">Bun venit, <span th:text="${currentUser}">User</span></h1>
             </div>
-            <a class="btn btn-main" th:href="@{/jobs}">Cauta joburi</a>
+            <a class="btn btn-main" th:href="@{/jobs}" th:if="${isCandidateDashboard}">Cauta joburi</a>
+            <a class="btn btn-main" href="#recruiter-candidates" th:if="${isRecruiterDashboard}">Vezi candidati</a>
         </div>
 
         <div th:if="${profileMessage}" class="alert alert-success" th:text="${profileMessage}"></div>
-
-        <div class="row g-3 mb-3">
+        <div th:if="${commandMessage}" class="alert alert-success" th:text="${commandMessage}"></div>
+        <div th:if="${commandError}" class="alert alert-danger" th:text="${commandError}"></div>
+        <div th:if="${adapterEvaluationMessage}" class="alert alert-success" th:text="${adapterEvaluationMessage}"></div>
+        <div th:if="${recruitmentProcessMessage}" class="alert alert-success" th:text="${recruitmentProcessMessage}"></div>
+        <th:block th:if="${isCandidateDashboard}">
+        <div class="row g-3 mb-3" th:if="${isCandidateDashboard}">
             <div class="col-md-3"><div class="cardx stat"><strong th:text="${applications.size()}">0</strong><span>aplicatii trimise</span></div></div>
             <div class="col-md-3"><div class="cardx stat"><strong th:text="${favorites.size()}">0</strong><span>joburi favorite</span></div></div>
             <div class="col-md-3"><div class="cardx stat"><strong th:text="${openApplications}">0</strong><span>aplicatii active</span></div></div>
             <div class="col-md-3"><div class="cardx stat"><strong th:text="${recommendations.size()}">0</strong><span>recomandari</span></div></div>
         </div>
+        </th:block>
 
-        <div class="row g-3 mb-3">
+        <th:block th:if="${isRecruiterDashboard}">
+            <div class="row g-3 mb-3">
+                <div class="col-md-3"><div class="cardx stat"><strong th:text="${recruiterCandidates.size()}">0</strong><span>candidati</span></div></div>
+                <div class="col-md-3"><div class="cardx stat"><strong th:text="${pendingCandidates}">0</strong><span>in evaluare</span></div></div>
+                <div class="col-md-3"><div class="cardx stat"><strong th:text="${approvedJobs}">0</strong><span>joburi aprobate</span></div></div>
+                <div class="col-md-3"><div class="cardx stat"><strong th:text="${pendingJobs}">0</strong><span>joburi pending</span></div></div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-lg-8" id="recruiter-candidates">
+                    <section class="cardx">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h2 class="h5 fw-bold mb-0">Candidati pentru evaluare</h2>
+                            <span class="text-secondary">rol recruiter</span>
+                        </div>
+                        <div th:if="${commandMessage}" class="alert alert-success py-2 px-3" th:text="${commandMessage}"></div>
+                        <div th:if="${commandError}" class="alert alert-danger py-2 px-3" th:text="${commandError}"></div>
+                        <div th:if="${recruiterCandidates.isEmpty()}" class="text-secondary">Nu exista candidati inca.</div>
+                        <div class="list-row" th:each="candidate : ${recruiterCandidates}">
+                            <div class="d-flex flex-wrap justify-content-between gap-3">
+                                <div>
+                                    <strong th:text="${candidate.name}">Candidat</strong>
+                                    <div class="text-secondary">
+                                        <span th:text="${candidate.email}">email</span> ·
+                                        <span th:text="${candidate.skill ?: 'N/A'}">skill</span>
+                                    </div>
+                                    <div class="text-secondary" th:text="${candidate.appliedJobTitle ?: 'Aplicatie generala'}">Job</div>
+                                    <span class="badge text-bg-light mt-2" th:text="${candidate.status}">Applied</span>
+                                    <div class="alert alert-primary py-2 px-3 mt-2 mb-0"
+                                         th:if="${candidate.status != null and candidate.status.equalsIgnoreCase('Applied')}">
+                                        <strong th:text="${candidate.name}">Candidatul</strong>
+                                        <span> a aplicat pentru jobul </span>
+                                        <strong th:text="${candidate.appliedJobTitle ?: 'Aplicatie generala'}">Job</strong>
+                                        <span>. Verifica aplicatia si accepta sau respinge candidatura.</span>
+                                    </div>
+                                    <div class="alert alert-success py-2 px-3 mt-2 mb-0"
+                                         th:if="${candidate.recruiterMessage != null and (#strings.contains(candidate.recruiterMessage, 'Candidate evaluated successfully') or #strings.contains(candidate.recruiterMessage, 'Evaluation method:'))}"
+                                         th:text="${candidate.recruiterMessage}">
+                                        Candidate evaluated successfully. Result: PASS
+                                    </div>
+                                        <div class="alert alert-info py-2 px-3 mt-2 mb-0"
+                                             th:if="${candidate.recruiterMessage != null and #strings.contains(candidate.recruiterMessage, 'Recruitment process completed successfully')}"
+                                             th:text="${candidate.recruiterMessage}"
+                                             style="white-space: pre-line;">Candidate verified</div>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 align-self-start">
+                                    <a class="btn btn-sm btn-outline-dark" th:href="@{'/candidates/cv/' + ${candidate.id}}">CV</a>
+                                    <button class="btn btn-sm btn-outline-primary"
+                                            type="button"
+                                            data-bs-toggle="modal"
+                                            th:attr="data-bs-target='#evaluateCandidateModal-' + ${candidate.id}">
+                                        Evaluate Candidate
+                                    </button>
+                                    <form th:action="@{'/candidates/approve/' + ${candidate.id}}" method="post"
+                                          onsubmit="return confirm('Sigur acceptati acest candidat?');">
+                                        <button class="btn btn-sm btn-success" type="submit">Accept Candidate</button>
+                                    </form>
+                                    <button class="btn btn-sm btn-outline-success"
+                                            type="button"
+                                            data-bs-toggle="modal"
+                                            th:attr="data-bs-target='#processRecruitmentModal-' + ${candidate.id}">
+                                        Process Recruitment
+                                    </button>
+                                    <form th:action="@{'/candidates/reject/' + ${candidate.id}}" method="post"
+                                          onsubmit="return confirm('Sigur respingeti acest candidat?');">
+                                        <button class="btn btn-sm btn-outline-danger" type="submit">Reject Candidate</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="modal fade"
+                                 th:id="'processRecruitmentModal-' + ${candidate.id}"
+                                 tabindex="-1"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <form th:action="@{'/recruitment/process/' + ${candidate.id}}" method="post">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title h5">Start Recruitment Process</h3>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Inchide"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <strong th:text="${candidate.name}">Candidat</strong>
+                                                    <div class="text-secondary" th:text="${candidate.appliedJobTitle ?: 'General recruitment'}">Job</div>
+                                                </div>
+                                                <label class="form-label">Scor test</label>
+                                                <input class="form-control"
+                                                       type="number"
+                                                       name="testScore"
+                                                       min="0"
+                                                       max="100"
+                                                       value="85"
+                                                       required>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                                                <button type="submit" class="btn btn-main">Start Recruitment Process</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade"
+                                 th:id="'evaluateCandidateModal-' + ${candidate.id}"
+                                 tabindex="-1"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <form th:action="@{'/candidates/evaluate/' + ${candidate.id}}" method="post">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title h5">Evaluare candidat</h3>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Inchide"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <strong th:text="${candidate.name}">Candidat</strong>
+                                                    <div class="text-secondary" th:text="${candidate.appliedJobTitle ?: 'Aplicatie generala'}">Job</div>
+                                                </div>
+                                                <label class="form-label">Metoda de evaluare</label>
+                                                <select class="form-select" name="evaluationMethod" required>
+                                                    <option value="testScore">Test Score</option>
+                                                    <option value="cv">CV Analysis</option>
+                                                    <option value="experience">Experience Evaluation</option>
+                                                </select>
+                                                <div class="row g-3 mt-1">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Scor test</label>
+                                                        <input class="form-control"
+                                                               type="number"
+                                                               name="testScore"
+                                                               min="0"
+                                                               max="100"
+                                                               value="85"
+                                                               required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Ani experienta</label>
+                                                        <input class="form-control"
+                                                               type="number"
+                                                               name="experienceYears"
+                                                               min="0"
+                                                               max="50"
+                                                               value="0"
+                                                               required>
+                                                    </div>
+                                                </div>
+                                                <label class="form-label mt-3">Observatii recruiter</label>
+                                                <textarea class="form-control"
+                                                          name="recruiterNotes"
+                                                          rows="4"
+                                                          th:text="${candidate.recruiterMessage != null and !#strings.contains(candidate.recruiterMessage, 'Candidate evaluated successfully') ? candidate.recruiterMessage : ''}"
+                                                          placeholder="Scrie observatii despre test, comunicare sau urmatorul pas..."></textarea>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                                                <button type="submit" class="btn btn-main">Salveaza evaluarea</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-lg-4" id="recruiter-jobs">
+                    <section class="cardx mb-3">
+                        <h2 class="h5 fw-bold">Notificari</h2>
+                        <div class="timeline mt-3">
+                            <div th:if="${notifications.isEmpty()}" class="text-secondary">Nu exista notificari noi.</div>
+                            <div class="timeline-item" th:each="notification : ${notifications}" th:text="${notification}">Notificare</div>
+                        </div>
+                    </section>
+                    <section class="cardx d-none">
+                        <h2 class="h5 fw-bold">Joburi gestionate</h2>
+                        <div th:if="${recruiterJobs.isEmpty()}" class="text-secondary">Nu exista joburi inca.</div>
+                        <div class="list-row" th:each="job : ${recruiterJobs}">
+                            <strong th:text="${job.title}">Job</strong>
+                            <div class="text-secondary"><span th:text="${job.domain}">Domeniu</span> · <span th:text="${job.location}">Locatie</span></div>
+                            <span class="badge mt-2" th:classappend="${job.approved} ? ' text-bg-success' : ' text-bg-warning'" th:text="${job.approved} ? 'Aprobat' : 'Pending'">Status</span>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <section class="cardx mb-3">
+                <h2 class="h5 fw-bold">Adauga job</h2>
+                <form class="row g-2 align-items-end" th:action="@{/admin/jobs/save}" method="post">
+                    <div class="col-lg-2"><label class="form-label">Titlu</label><input class="form-control" name="title" required></div>
+                    <div class="col-lg-3"><label class="form-label">Descriere</label><input class="form-control" name="description" required></div>
+                    <div class="col-lg-2"><label class="form-label">Domeniu</label><input class="form-control" name="domain" required></div>
+                    <div class="col-lg-1"><label class="form-label">Locatie</label><input class="form-control" name="location" required></div>
+                    <div class="col-lg-1"><label class="form-label">Nivel</label><input class="form-control" name="experienceLevel" required></div>
+                    <div class="col-lg-1"><label class="form-label">Salariu</label><input class="form-control" name="salary" type="number" step="100" required></div>
+                    <div class="col-lg-1 form-check ms-2">
+                        <input class="form-check-input" type="checkbox" name="approved" value="true" id="recruiterApprovedNew">
+                        <label class="form-check-label" for="recruiterApprovedNew">Aprobat</label>
+                    </div>
+                    <div class="col-lg-1"><button class="btn btn-main w-100" type="submit">Salveaza</button></div>
+                </form>
+            </section>
+
+            <section class="cardx mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h5 fw-bold mb-0">Management date joburi</h2>
+                    <span class="text-secondary">editare, clonare, aprobare, respingere, eliminare</span>
+                </div>
+                <div th:if="${recruiterJobs.isEmpty()}" class="text-secondary">Nu exista joburi inca.</div>
+                <div class="table-wrap" th:if="${!recruiterJobs.isEmpty()}">
+                    <table class="table align-middle">
+                        <thead><tr><th>Titlu</th><th>Domeniu</th><th>Locatie</th><th>Nivel</th><th>Salariu</th><th>Status</th><th>Actiuni</th></tr></thead>
+                        <tbody>
+                        <tr th:each="job : ${recruiterJobs}">
+                            <td th:text="${job.title}">Titlu</td>
+                            <td th:text="${job.domain}">Domeniu</td>
+                            <td th:text="${job.location}">Locatie</td>
+                            <td th:text="${job.experienceLevel}">Nivel</td>
+                            <td th:text="${job.salary}">Salariu</td>
+                            <td>
+                                <span class="badge" th:classappend="${job.approved} ? ' text-bg-success' : ' text-bg-warning'" th:text="${job.approved ? 'Aprobat' : 'In asteptare'}">Status</span>
+                            </td>
+                            <td class="d-flex gap-2 align-items-center">
+                                <button class="btn btn-sm btn-main" type="button"
+                                        th:attr="data-id=${job.id},data-title=${job.title},data-description=${job.description},data-domain=${job.domain},data-location=${job.location},data-experience=${job.experienceLevel},data-salary=${job.salary},data-approved=${job.approved}"
+                                        onclick="openJobEditModal(this)">
+                                    Update
+                                </button>
+                                <button class="btn btn-sm btn-clone-soft" type="button"
+                                        th:attr="data-clone-url=@{'/admin/jobs/clone/' + ${job.id}}"
+                                        onclick="openJobCloneModal(this)">
+                                    Cloneaza job
+                                </button>
+                                <form th:action="@{'/admin/jobs/approval/' + ${job.id}}" method="post"
+                                      th:onsubmit="${job.approved} ? 'return confirm(\'Sunteti sigur ca doriti sa respingeti acest job?\');' : 'return confirm(\'Sunteti sigur ca doriti sa aprobati acest job?\');'">
+                                    <input type="hidden" name="approved" th:value="${!job.approved}">
+                                    <button class="btn btn-sm btn-ok-soft" type="submit" th:text="${job.approved ? 'Respinge' : 'Aproba'}">Aproba</button>
+                                </form>
+                                <form th:action="@{'/admin/jobs/delete/' + ${job.id}}" method="post" onsubmit="return confirm('Confirmati stergerea jobului? Aceasta actiune este definitiva.');">
+                                    <button class="btn btn-sm btn-danger-soft" type="submit">Sterge</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="modal fade" id="jobEditModal" tabindex="-1" aria-labelledby="jobEditModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <form th:action="@{/admin/jobs/save}" method="post" class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="jobEditModalLabel">Editeaza Job</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Inchide"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="id" id="jobEditId" />
+                            <input type="hidden" name="approved" id="jobEditApprovedHidden" disabled />
+                            <div class="clone-note mb-3" id="jobCloneNote">Acesta este un job clonat. La salvare se creeaza un job nou, iar jobul original ramane nemodificat.</div>
+                            <div class="mb-3">
+                                <label class="form-label">Titlu job</label>
+                                <input class="form-control" type="text" name="title" id="jobEditTitle" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Descriere</label>
+                                <textarea class="form-control" name="description" id="jobEditDescription" rows="4" required></textarea>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Domeniu</label>
+                                    <input class="form-control" type="text" name="domain" id="jobEditDomain" required />
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Locatie</label>
+                                    <input class="form-control" type="text" name="location" id="jobEditLocation" required />
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Nivel</label>
+                                    <input class="form-control" type="text" name="experienceLevel" id="jobEditExperience" required />
+                                </div>
+                            </div>
+                            <div class="row g-3 mt-3 align-items-end">
+                                <div class="col-md-6">
+                                    <label class="form-label">Salariu</label>
+                                    <input class="form-control" type="number" step="100" name="salary" id="jobEditSalary" required />
+                                </div>
+                                <div class="col-md-6 form-check pt-4">
+                                    <input class="form-check-input" type="checkbox" name="approved" id="jobEditApproved" value="true" />
+                                    <label class="form-check-label" for="jobEditApproved">Job aprobat</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                            <button type="submit" class="btn btn-main" id="jobEditSubmit">Salveaza modificari</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <section class="cardx mb-3" id="technical-tests">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h5 fw-bold mb-0">Teste Tehnice</h2>
+                    <span class="text-secondary">constructie pas cu pas pentru candidati</span>
+                </div>
+                <div class="test-builder-grid">
+                    <form th:action="@{/admin/tests/create}" method="post" class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Titlu test</label>
+                            <input class="form-control" name="title" placeholder="Test Java Spring Boot" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Dificultate</label>
+                            <select class="form-select" name="difficulty" required>
+                                <option value="Junior">Junior</option>
+                                <option value="Middle">Middle</option>
+                                <option value="Senior">Senior</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Durata minute</label>
+                            <input class="form-control" type="number" name="duration" min="10" step="5" value="60" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Domeniu tehnic</label>
+                            <input class="form-control" name="domain" placeholder="Backend Java" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Intrebari</label>
+                            <textarea class="form-control" name="questions" rows="7" placeholder="1. Explica Dependency Injection.&#10;2. Creeaza un endpoint REST pentru candidati.&#10;3. Scrie o interogare JPA pentru joburi aprobate." required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-main w-100" type="submit">Genereaza test</button>
+                        </div>
+                    </form>
+
+                    <div>
+                        <div class="test-preview mb-3" th:if="${createdTest != null}">
+                            <p class="text-uppercase text-secondary fw-bold mb-1">Test creat</p>
+                            <h3 class="h5 fw-bold" th:text="${createdTest.title}">Test nou</h3>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge text-bg-dark" th:text="${createdTest.domain}">Domeniu</span>
+                                <span class="badge text-bg-warning" th:text="${createdTest.difficulty}">Nivel</span>
+                                <span class="badge text-bg-info" th:text="${createdTest.duration + ' min'}">60 min</span>
+                            </div>
+                            <pre class="test-questions mb-0" th:text="${createdTest.questions}">Intrebari</pre>
+                        </div>
+
+                        <div class="table-wrap">
+                            <table class="table align-middle">
+                                <thead><tr><th>Titlu</th><th>Domeniu</th><th>Dificultate</th><th>Durata</th><th>Intrebari</th></tr></thead>
+                                <tbody>
+                                <tr th:each="test : ${tests}">
+                                    <td th:text="${test.title}">Titlu</td>
+                                    <td th:text="${test.domain}">Domeniu</td>
+                                    <td><span class="badge text-bg-light" th:text="${test.difficulty}">Junior</span></td>
+                                    <td th:text="${test.duration + ' min'}">60 min</td>
+                                    <td><pre class="test-questions mb-0" th:text="${test.questions}">Intrebari</pre></td>
+                                </tr>
+                                <tr th:if="${tests.isEmpty()}">
+                                    <td colspan="5" class="text-secondary">Nu exista teste tehnice generate.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </th:block>
+
+        <div class="row g-3 mb-3" th:if="${isCandidateDashboard}">
             <div class="col-lg-8">
                 <section class="cardx">
                     <div class="d-flex justify-content-between mb-3">
@@ -66,15 +460,15 @@
                         <span class="text-secondary">actualizat in timp real</span>
                     </div>
                     <div th:if="${applications.isEmpty()}" class="text-secondary">Nu ai aplicatii inca. Exploreaza joburile disponibile.</div>
-                    <div class="list-row" th:each="application : ${applications}">
+                    <div class="list-row" th:each="candidateApplication : ${applications}">
                         <div class="d-flex flex-wrap justify-content-between gap-2">
                             <div>
-                                <strong th:text="${application.appliedJobTitle ?: 'Aplicatie generala'}">Job</strong>
-                                <div class="text-secondary" th:text="${application.recruiterMessage}">Mesaj</div>
+                                <strong th:text="${candidateApplication.appliedJobTitle ?: 'Aplicatie generala'}">Job</strong>
+                                <div class="text-secondary" th:text="${candidateApplication.recruiterMessage}">Mesaj</div>
                             </div>
-                            <span class="badge text-bg-light align-self-start" th:text="${application.status}">Applied</span>
+                            <span class="badge text-bg-light align-self-start" th:text="${candidateApplication.status}">Applied</span>
                         </div>
-                        <div class="bar mt-2"><span th:style="'width:' + (${application.status == 'Accepted'} ? '100' : (${application.status == 'Rejected'} ? '100' : (${application.status == 'Interviewed'} ? '70' : '35'))) + '%'"></span></div>
+                        <div class="bar mt-2"><span th:style="'width:' + (${candidateApplication.status == 'Accepted'} ? '100' : (${candidateApplication.status == 'Rejected'} ? '100' : (${candidateApplication.status == 'Interviewed'} ? '70' : '35'))) + '%'"></span></div>
                     </div>
                 </section>
             </div>
@@ -115,7 +509,7 @@
             </div>
         </div>
 
-        <div class="row g-3">
+        <div class="row g-3" th:if="${isCandidateDashboard}">
             <div class="col-lg-6" id="profile">
                 <section class="cardx">
                     <h2 class="h5 fw-bold">Profil si CV</h2>
@@ -140,6 +534,64 @@
                     </form>
                 </section>
             </div>
+            <div class="col-lg-6" id="my-skills">
+                <section class="cardx">
+                    <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                        <div>
+                            <h2 class="h5 fw-bold mb-1">My Skills</h2>
+                        </div>
+                    </div>
+
+                    <form th:action="@{/skills/add}" method="post" class="row g-2 mb-3">
+                        <div class="col-md-5">
+                            <label class="form-label">Categorie</label>
+                            <select class="form-select" name="category" required>
+                                <option th:each="category : ${skillCategories}" th:value="${category}" th:text="${category}">Backend Skills</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label">Skill</label>
+                            <input class="form-control" name="name" placeholder="Java, SQL, HTML..." required>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button class="btn btn-main w-100" type="submit">Adauga</button>
+                        </div>
+                    </form>
+
+                    <div th:if="${!hasSkillGroups}" class="text-secondary">Adauga primul skill pentru a construi profilul tau tehnic.</div>
+                    <div class="skill-tree" th:if="${hasSkillGroups}">
+                        <div class="skill-group" th:each="group : ${skillGroups}">
+                            <strong th:text="${group.name}">Backend Skills</strong>
+                            <div class="skill-leaves">
+                                <span class="skill-pill" th:each="child : ${group.children}">
+                                    <span th:text="${child.name}">Java</span>
+                                    <form th:action="@{'/skills/delete/' + ${child.id}}" method="post">
+                                        <button class="skill-remove" type="submit" aria-label="Sterge skill">x</button>
+                                    </form>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-1" th:if="${isCandidateDashboard}">
+            <div class="col-lg-6">
+                <section class="cardx">
+                    <h2 class="h5 fw-bold">CV Section</h2>
+                    <p class="text-secondary mb-2">Structura de skill-uri este folosita in profilul candidatului si in CV.</p>
+                    <div class="skill-tree" th:if="${hasSkillGroups}">
+                        <div class="skill-group" th:each="group : ${skillGroups}">
+                            <strong th:text="${group.name}">Backend Skills</strong>
+                            <div class="skill-leaves">
+                                <span class="skill-pill" th:each="child : ${group.children}" th:text="${child.name}">Java</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${!hasSkillGroups}" class="text-secondary">Skill-urile adaugate vor aparea aici in format ierarhic.</div>
+                </section>
+            </div>
             <div class="col-lg-6" id="messages">
                 <section class="cardx">
                     <h2 class="h5 fw-bold">Mesagerie recruiter</h2>
@@ -157,5 +609,86 @@
     </main>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const jobModalFields = {
+        id: document.getElementById('jobEditId'),
+        title: document.getElementById('jobEditTitle'),
+        description: document.getElementById('jobEditDescription'),
+        domain: document.getElementById('jobEditDomain'),
+        location: document.getElementById('jobEditLocation'),
+        experience: document.getElementById('jobEditExperience'),
+        salary: document.getElementById('jobEditSalary'),
+        approved: document.getElementById('jobEditApproved'),
+        approvedHidden: document.getElementById('jobEditApprovedHidden'),
+        titleLabel: document.getElementById('jobEditModalLabel'),
+        submit: document.getElementById('jobEditSubmit'),
+        modal: document.getElementById('jobEditModal')
+    };
+
+    function fillJobModal(job) {
+        if (!jobModalFields.modal) {
+            return;
+        }
+        jobModalFields.id.value = job.id || '';
+        jobModalFields.title.value = job.title || '';
+        jobModalFields.description.value = job.description || '';
+        jobModalFields.domain.value = job.domain || '';
+        jobModalFields.location.value = job.location || '';
+        jobModalFields.experience.value = job.experienceLevel || job.experience || '';
+        jobModalFields.salary.value = job.salary || '';
+        jobModalFields.approved.checked = job.approved === true || job.approved === 'true';
+        jobModalFields.approvedHidden.value = jobModalFields.approved.checked ? 'true' : 'false';
+    }
+
+    function setJobModalMode(mode) {
+        if (!jobModalFields.modal) {
+            return;
+        }
+        const cloneMode = mode === 'clone';
+        jobModalFields.modal.classList.toggle('clone-mode', cloneMode);
+        jobModalFields.titleLabel.textContent = cloneMode ? 'Cloneaza Job' : 'Editeaza Job';
+        jobModalFields.submit.textContent = cloneMode ? 'Salveaza job clonat' : 'Salveaza modificari';
+        jobModalFields.id.disabled = cloneMode;
+        jobModalFields.description.readOnly = cloneMode;
+        jobModalFields.domain.readOnly = cloneMode;
+        jobModalFields.approved.disabled = cloneMode;
+        jobModalFields.approvedHidden.disabled = !cloneMode;
+    }
+
+    function showJobModal() {
+        if (jobModalFields.modal) {
+            bootstrap.Modal.getOrCreateInstance(jobModalFields.modal).show();
+        }
+    }
+
+    function openJobEditModal(button) {
+        const dataset = button.dataset;
+        setJobModalMode('edit');
+        fillJobModal({
+            id: dataset.id,
+            title: dataset.title,
+            description: dataset.description,
+            domain: dataset.domain,
+            location: dataset.location,
+            experience: dataset.experience,
+            salary: dataset.salary,
+            approved: dataset.approved
+        });
+        showJobModal();
+    }
+
+    async function openJobCloneModal(button) {
+        setJobModalMode('clone');
+        const response = await fetch(button.dataset.cloneUrl);
+        if (!response.ok) {
+            alert('Jobul nu a putut fi clonat.');
+            return;
+        }
+        const clonedJob = await response.json();
+        clonedJob.id = '';
+        fillJobModal(clonedJob);
+        showJobModal();
+    }
+</script>
 </body>
 </html>

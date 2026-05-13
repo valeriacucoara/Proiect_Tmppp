@@ -53,21 +53,35 @@
             margin-bottom: 1.8rem;
             line-height: 1.6;
         }
-        .form-control {
+        .form-control,
+        .form-select {
             background: rgba(255, 255, 255, 0.12);
             border: 1px solid rgba(255, 255, 255, 0.18);
             color: #fff;
             border-radius: 16px;
             padding: 1rem 1.1rem;
         }
+        .form-select option {
+            color: #172033;
+        }
         .form-control::placeholder {
             color: rgba(255, 255, 255, 0.65);
         }
-        .form-control:focus {
+        .form-control:focus,
+        .form-select:focus {
             background: rgba(255, 255, 255, 0.16);
             border-color: rgba(255, 255, 255, 0.45);
             box-shadow: 0 0 0 0.2rem rgba(102, 204, 255, 0.16);
             color: #fff;
+        }
+        .type-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 16px;
+            padding: 1rem;
+        }
+        .type-card small {
+            color: rgba(255, 255, 255, 0.72);
         }
         .form-label {
             color: rgba(255, 255, 255, 0.9);
@@ -119,6 +133,14 @@
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="adresa@exemplu.com" required>
+            </div>
+            <div class="mb-3 type-card">
+                <label for="userType" class="form-label">Tip utilizator</label>
+                <select class="form-select" id="userType" name="userType" required>
+                    <option value="candidate">Candidate</option>
+                    <option value="recruiter">Recruiter</option>
+                </select>
+                <small>Factory Method creeaza automat obiectul potrivit pentru tipul selectat.</small>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Parolă</label>
